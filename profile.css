@@ -1,0 +1,14 @@
+#images {
+	border: 1px solid silver;
+	padding: 5px;
+}
+
+#images a {
+	border: 0px;
+}
+
+#images img.thumbnail {
+	border: 1px solid black;
+	margin: 5px;
+	height: 100px;
+}
