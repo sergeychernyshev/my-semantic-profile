@@ -12,6 +12,20 @@ $baseURL = '/profile/';
 $defaultLanguage = 'en'; // this is used when literals don't define language specifically
 
 /**
+ * location of Personal Profile Document
+ */
+$profileDocument = '../sergey.rdf';
+$profileDocumentURI = '/sergey.rdf';
+
+/**
+ * Uncomment for test cases
+ */
+#$profileDocument = 'tests/timbl.rdf';
+#$profileDocumentURI = '/profile/tests/timbl.rdf';
+
+$googleMapsKey = 'ABQIAAAAq_i4aTseMGLic8bgu1NQHRSEs_qikIHa8VCb2-5R0mAlXQZKPRRLkUrkPAVXUBMadjFafv4_Xrmr0g';
+
+/**
  * Automated version generator
  * $Id$
  */
@@ -54,12 +68,6 @@ function xmlLang($lang)
  */
 $foaf = 'http://xmlns.com/foaf/0.1/';
 $dc = 'http://purl.org/dc/elements/1.1/';
-
-/**
- * location of Personal Profile Document
- */
-$profileDocument = '/home/sergey/www/sites/sergeychernyshev.com/sergey.rdf';
-$profileDocumentURI = '/sergey.rdf';
 
 #phpinfo(); exit;
 
@@ -168,14 +176,14 @@ else
 }
 
 header('Vary: Accept');
-if (stristr($_SERVER["HTTP_ACCEPT"], "application/xhtml+xml")) 
-    header("Content-Type: application/xhtml+xml; charset=utf-8");
-else
+#if (stristr($_SERVER["HTTP_ACCEPT"], "application/xhtml+xml")) 
+#    header("Content-Type: application/xhtml+xml; charset=utf-8");
+#else
     header("Content-Type: text/html; charset=utf-8");
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/">
-<head profile='http://www.w3.org/2006/03/hcard'>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<head profile="http://www.w3.org/2006/03/hcard http://gmpg.org/xfn/11">
 	<title><?=$title ?></title>
 	<link rel="meta" type="application/rdf+xml" title="FOAF" href="<?=$profileDocumentURI ?>" />
 	<link rel="alternate" type="application/rdf+xml" title="<?=$title ?> (RDF)" href="<?=$profileDocumentURI ?>" />
@@ -184,7 +192,7 @@ else
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body class="vcard" about="<?=$personURI->getLabel()?>">
-<h1><?=$namesText?> <a href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
+<h1><?=$namesText?> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
 <?
 
 /**
@@ -248,7 +256,7 @@ while ($it->hasNext()) {
 	$blogs[] = $statement->getObject();
 }
 
-if (count($homepages) > 0 || count($blogs))
+if (count($homepages))
 {
 	?><h2>Sites</h2>
 <div id="sites"><ul><?
@@ -271,7 +279,12 @@ if (count($homepages) > 0 || count($blogs))
 	}
 
 ?></ul></div>
+<?
+}
 
+if (count($blogs))
+{
+?>
 <h2>Blogs</h2>
 <div id="blogs"><ul><?
 
@@ -295,11 +308,97 @@ if (count($homepages) > 0 || count($blogs))
 ?></ul></div>
 <?
 }
+
+$query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+select ?name, ?homepage, ?uri
+where {
+<'.$personURI->getLabel().'> foaf:knows ?uri .
+OPTIONAL { ?uri  foaf:homepage  ?homepage } .
+OPTIONAL { ?uri  foaf:name ?name }
+}';
+#echo "$query\n";
+$people = $model->sparqlQuery($query);
+#echo var_export($people);
+
+if (count($people))
+{
 ?>
-<div style="border-top: 1px solid silver; padding: 5px; align: center">
-<a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
-<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Show RDFa on this page"  style="margin: 0px 5px 0px 5px; border: 0px"/></a>
-<a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="hcard.png" alt="Show hCard on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<h2>People</h2>
+<div id="people"><ul><?
+
+	foreach ($people as $person)
+        {
+		?><li rel="foaf:knows" resource="<?=$person['?uri']->getURI() ?>"><?
+		if ($person['?homepage'])
+		{
+			?><span rel="foaf:homepage" resource="<?=$person['?homepage']->getURI() ?>"/><a class="url" rel="contact" href="<?=$person['?homepage']->getURI() ?>"><?
+		}
+
+		if ($person['?name'])
+		{
+			?><span property="foaf:name"<?=xmlLang($person['?name']->getLanguage()) ?> about="<?=$person['?uri']->getURI() ?>"><?=$person['?name']->getLabel() ?></span><?
+		}
+		else
+		{
+			?><span><?=$person['?uri']->getURI() ?></span><?
+		}
+
+		if ($person['?homepage'])
+		{
+			?></a><?
+		}
+		?> <a href="<?=$person['?uri']->getURI() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></li><?
+	}
+?></ul></div>
+<?
+}
+
+$query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+select ?lat, ?lng
+where { <'.$personURI->getLabel().'> foaf:based_near ?point .
+?point  geo:lat  ?lat
+?point  geo:long ?lng
+}';
+#echo "$query\n";
+$locations = $model->sparqlQuery($query);
+#echo var_export($locations);
+
+if (count($locations))
+{
+?><h2>Location</h2>
+<div id="location">
+<?
+	$locnum=1;
+	foreach ($locations as $location)
+	{
+		$markers[] = $location['?lat']->getLabel().','.$location['?lng']->getLabel();
+		?>
+		<span rel="foaf:based_near"><span typeof="geo:Point" class="geo">
+		<span property="geo:lat" class="latitude" style="display:none"><?=$location['?lat']->getLabel()?>"</span>
+		<span property="geo:long" class="longitude" style="display:none"><?=$location['?lng']->getLabel()?></span>
+		</span></span><?
+		$locnum += 1;
+	}
+
+?>
+<div id="map" style="width: 600px; height: 400px"><img src="http://maps.google.com/staticmap?<?
+	if (count($locations) < 2)
+	{
+		echo 'zoom=12&amp;';
+	}
+?>size=600x400&amp;markers=<?=implode('|', $markers); ?>%7C&amp;maptype=roadmap&amp;key=<?=$googleMapsKey?>" alt="locations map" width="600" height="400"/></div>
+</div>
+<?
+}
+
+?>
+<div style="border-top: 1px solid silver; padding: 5px; align: center; margin-top: 20px">
+<a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>" title="Check XHTML + RDFa validity"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>" title="Extract RDF from RDFa on this page"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Extract RDF from RDFa on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER["SCRIPT_URI"])?>" title="Show hCard information on this page"><img src="hcard.png" alt="Show hCard information on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://gmpg.org/xfn/" title="XFN Homepage"><img src="xfn-btn.gif" alt="XFN" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://microformats.org/wiki/geo" title="Geo Microformat Page"><img src="geo.png" alt="geo" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 </div>
 <div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?=$version?> r<?=$build?>)</div>
 </body>
