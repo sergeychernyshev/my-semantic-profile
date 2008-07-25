@@ -181,6 +181,7 @@ else
 	<link rel="alternate" type="application/rdf+xml" title="<?=$title ?> (RDF)" href="<?=$profileDocumentURI ?>" />
 	<link type="text/css" rel="stylesheet" href="floatbox/floatbox.css" />
 	<link type="text/css" rel="stylesheet" href="profile.css" />
+	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body class="vcard" about="<?=$personURI->getLabel()?>">
 <h1><?=$namesText?> <a href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
@@ -194,7 +195,9 @@ $images = array();
 $it = $model->findAsIterator($personURI, new Resource($foaf.'img'), NULL);
 while ($it->hasNext()) {
 	$statement = $it->next();
-	$images[] = $statement->getObject();
+	$images[] = array(
+		'resource' => $statement->getObject()
+		);
 }
 
 if (count($images) > 0)
@@ -203,17 +206,19 @@ if (count($images) > 0)
 <div id="images">
 <?
 
-	foreach ($images as $imageResource)
+	foreach ($images as $image)
 	{
+		$imageResource = $image['resource'];
+
 		$it = $model->findAsIterator($imageResource, new Resource($foaf.'thumbnail'), NULL);
 		if ($it->hasNext()) {
 			$statement = $it->next();
-			?><a rel="foaf:img" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$imageResource->getURI() ?>"/></a>
+			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$imageResource->getURI() ?>"/></a></span>
 <?
 		}
 		else
 		{
-			?><a rel="foaf:img" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>"/></a>
+			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>"/></a></span>
 <?
 		}
 	}
@@ -296,6 +301,6 @@ if (count($homepages) > 0 || count($blogs))
 <a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Show RDFa on this page"  style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="hcard.png" alt="Show hCard on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 </div>
-<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with MySemanticProfile v.<?=$version?> r<?=$build?></div>
+<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?=$version?> r<?=$build?>)</div>
 </body>
 </html>
