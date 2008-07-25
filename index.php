@@ -16,7 +16,9 @@ $defaultLanguage = 'en'; // this is used when literals don't define language spe
  * $Id$
  */
 $version = '0.2';
-$build = '$Rev$';
+
+preg_match('$Rev$', '$Rev$', $matches);
+$build = $matches[1];
 
 /**
  * We're using RAP library for RDF parsing
@@ -294,6 +296,6 @@ if (count($homepages) > 0 || count($blogs))
 <a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Show RDFa on this page"  style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="hcard.png" alt="Show hCard on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 </div>
-<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with MySemanticProfile v.<?=$version?> (build <?=$build?>)</div>
+<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with MySemanticProfile v.<?=$version?>r<?=$build?></div>
 </body>
 </html>
