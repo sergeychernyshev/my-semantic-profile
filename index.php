@@ -9,6 +9,14 @@
 #$baseURL = $_SERVER["SCRIPT_NAME"]; // change this if you rewritten a URL to something else
 $baseURL = '/profile/';
 
+$defaultLanguage = 'en'; // this is used when literals don't define language specifically
+
+/**
+ * Automated version generator
+ * $Id$
+ */
+$version='$Rev$';
+
 /**
  * We're using RAP library for RDF parsing
  */
@@ -23,6 +31,19 @@ function printStatement($statement)
 	echo "<p>Predicate: ".$statement->getLabelPredicate()."</p>";
 	echo "<p>Object: ".$statement->getLabelObject()."</p>";
 	echo "<div>";
+}
+
+# helper function to insert language tab
+function xmlLang($lang)
+{
+	if ($lang)
+	{
+		return ' xml:lang="'.$lang.'"';
+	}
+	else
+	{
+		return '';
+	}
 }
 
 /*
@@ -116,7 +137,7 @@ $names = array();
 $it = $model->findAsIterator($personURI, new Resource($foaf.'name'), NULL);
 while ($it->hasNext()) {
 	$statement = $it->next();
-	$names[] = $statement->getLabelObject();
+	$names[] = $statement->getObject();
 }
 
 $title = 'Profile';
@@ -126,7 +147,7 @@ $personName = '';
 
 if (count($names) > 0)
 {
-	$personName = $names[0];
+	$personName = $names[0]->getLabel();
 	$title = $personName."'s profile";
 
 	$first = true;
@@ -134,7 +155,7 @@ if (count($names) > 0)
 	foreach ($names as $name)
 	{
 		// apparently hCard allows only one fn (formatted name)
-		$namesText .= ($first ? '' : ' AKA ').($first ? '<span class="fn">' : '').$name.($first ? '</span>' : '');
+		$namesText .= ($first ? '' : ' AKA ').'<span'.($first ? ' class="fn"' : '').' property="foaf:name"'.xmlLang($name->getLanguage()).'>'.$name->getLabel().'</span>';
 		$first = false;
 	}
 }
@@ -150,14 +171,13 @@ else
     header("Content-Type: text/html; charset=utf-8");
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/">
 <head profile='http://www.w3.org/2006/03/hcard'>
 	<title><?=$title ?></title>
 	<link rel="meta" type="application/rdf+xml" title="FOAF" href="<?=$profileDocumentURI ?>" />
 	<link rel="alternate" type="application/rdf+xml" title="<?=$title ?> (RDF)" href="<?=$profileDocumentURI ?>" />
 	<link type="text/css" rel="stylesheet" href="floatbox/floatbox.css" />
 	<link type="text/css" rel="stylesheet" href="profile.css" />
-	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body class="vcard" about="<?=$personURI->getLabel()?>">
 <h1><?=$namesText?> <a href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
@@ -185,12 +205,12 @@ if (count($images) > 0)
 		$it = $model->findAsIterator($imageResource, new Resource($foaf.'thumbnail'), NULL);
 		if ($it->hasNext()) {
 			$statement = $it->next();
-			?><a class="photo" href="<?=$imageResource->getURI() ?>" rel="gallery1"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>"/></a>
+			?><a rel="foaf:img" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$imageResource->getURI() ?>"/></a>
 <?
 		}
 		else
 		{
-			?><a class="photo" href="<?=$imageResource->getURI() ?>" rel="gallery1"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>"/></a>
+			?><a rel="foaf:img" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>"/></a>
 <?
 		}
 	}
@@ -231,12 +251,13 @@ if (count($homepages) > 0 || count($blogs))
 		$it = $model->findAsIterator($homepageResource, new Resource($dc.'title'), NULL);
 		if ($it->hasNext()) {
 			$statement = $it->next();
-			?><li><a class="url" rel="me" href="<?=$homepageResource->getURI() ?>"><?=$statement->getLabelObject() ?></a></li>
+			$homepagetitle = $statement->getObject();
+			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepageResource->getURI() ?>" property="dc:title" href="<?=$homepageResource->getURI() ?>"<?=xmlLang($homepagetitle->getLanguage()) ?>><?=$homepagetitle->getLabel() ?></a></li>
 	<?
 		}
 		else
 		{
-			?><li><a class="url" rel="me" href="<?=$homepageResource->getURI() ?>"><?=$homepageResource->getURI() ?></a></li>
+			?><li rel="foaf:homepage"><a class="url" rel="me" href="<?=$homepageResource->getURI() ?>"><?=$homepageResource->getURI() ?></a></li>
 	<?
 		}
 	}
@@ -252,12 +273,13 @@ if (count($homepages) > 0 || count($blogs))
 		$it = $model->findAsIterator($blogResource, new Resource($dc.'title'), NULL);
 		if ($it->hasNext()) {
 			$statement = $it->next();
-			?><li><a class="url" href="<?=$blogResource->getURI() ?>"><?=$statement->getLabelObject() ?></a></li>
+			$blogtitle = $statement->getObject();
+			?><li rel="foaf:blog"><a class="url" href="<?=$blogResource->getURI() ?>" about="<?=$homepageResource->getURI() ?>" property="dc:title"<?=xmlLang($blogtitle->getLanguage()) ?>><?=$blogtitle->getLabel() ?></a></li>
 	<?
 		}
 		else
 		{
-			?><li><a class="url" href="<?=$blogResource->getURI() ?>"><?=$blogResource->getURI() ?></a></li>
+			?><li rel="foaf:blog"><a class="url" href="<?=$blogResource->getURI() ?>"><?=$blogResource->getURI() ?></a></li>
 	<?
 		}
 	}
@@ -267,8 +289,10 @@ if (count($homepages) > 0 || count($blogs))
 }
 ?>
 <div style="border-top: 1px solid silver; padding: 5px; align: center">
-<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
-<a href="http://microformats.org/wiki/hcard"><img src="hcard.png" alt="hCard" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Show RDFa on this page"  style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER["SCRIPT_URI"])?>"><img src="hcard.png" alt="Show hCard on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 </div>
+<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with MySemanticProfile v.<?=$version?></div>
 </body>
 </html>
