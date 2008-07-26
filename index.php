@@ -183,7 +183,7 @@ header('Vary: Accept');
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-<head profile="http://www.w3.org/2006/03/hcard http://gmpg.org/xfn/11">
+<head profile="http://www.w3.org/2006/03/hcard">
 	<title><?=$title ?></title>
 	<link rel="meta" type="application/rdf+xml" title="FOAF" href="<?=$profileDocumentURI ?>" />
 	<link rel="alternate" type="application/rdf+xml" title="<?=$title ?> (RDF)" href="<?=$profileDocumentURI ?>" />
@@ -369,16 +369,16 @@ if (count($locations))
 ?><h2>Location</h2>
 <div id="location">
 <?
-	$locnum=1;
+	$first=true;
 	foreach ($locations as $location)
 	{
 		$markers[] = $location['?lat']->getLabel().','.$location['?lng']->getLabel();
 		?>
-		<span rel="foaf:based_near"><span typeof="geo:Point" class="geo">
-		<span property="geo:lat" class="latitude" style="display:none"><?=$location['?lat']->getLabel()?>"</span>
-		<span property="geo:long" class="longitude" style="display:none"><?=$location['?lng']->getLabel()?></span>
+		<span rel="foaf:based_near"><span typeof="geo:Point"<? if ($first) {?> class="geo"<? } ?>>
+		<span property="geo:lat"<? if ($first) {?> class="latitude"<? } ?> style="display:none"><?=$location['?lat']->getLabel()?></span>
+		<span property="geo:long"<? if ($first) {?> class="longitude"<? } ?> style="display:none"><?=$location['?lng']->getLabel()?></span>
 		</span></span><?
-		$locnum += 1;
+		$first = false;
 	}
 
 ?>
