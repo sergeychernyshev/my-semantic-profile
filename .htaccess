@@ -1,2 +1,5 @@
 RewriteEngine On
+
+# change this alias to your resource URI
+# you can even move it out of this folder, then comment out this line
 RewriteRule ^i$				id.php		[PT]
