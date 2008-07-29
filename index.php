@@ -28,42 +28,6 @@ $model = getModel();
 $personURI = getPrimaryPerson($model);
 
 /**
- * If we were called with the URI of the object (probable URL-rewritten in .htaccess) then do appropriate 303 redirect
- */
-if ($_SERVER["SCRIPT_URI"] == $personURI->getLabel())
-{
-	$destinations = array(
-			'application/rdf+xml' => $profileDocumentURI,
-	//		'text/rdf+n3' => '/sergey.n3',
-	//		'application/turtle' => '/sergey.n3',
-	//		'application/rdf+n3' => '/sergey.n3'
-		);
-
-	// http://ptlis.net/source/php-content-negotiation/#v1.0.2
-	include_once('content_negotiation.inc.php');
-	$mimes = content_negotiation::mime_all_negotiation();
-
-	foreach ($mimes['type'] as $mime)
-	{
-		if (isset($destinations[$mime]))
-		{
-			$destination = $destinations[$mime];
-			break;
-		}
-	}
-
-	if (!isset($destination))
-	{
-		$destination = $baseURL;
-	}
-
-	header('Vary: Accept');
-	header("Location: $destination", true, 303);
-
-	exit;
-}
-
-/**
  * Let's get person's name
  */
 $names = array();
