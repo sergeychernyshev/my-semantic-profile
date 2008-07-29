@@ -4,28 +4,6 @@
  */
 
 /**
- * Someconfiguration parameters
- */
-#$baseURL = $_SERVER["SCRIPT_NAME"]; // change this if you rewritten a URL to something else
-$baseURL = '/profile/';
-
-$defaultLanguage = 'en'; // this is used when literals don't define language specifically
-
-/**
- * location of Personal Profile Document
- */
-$profileDocument = '../sergey.rdf';
-$profileDocumentURI = '/sergey.rdf';
-
-/**
- * Uncomment for test cases
- */
-#$profileDocument = 'tests/timbl.rdf';
-#$profileDocumentURI = '/profile/tests/timbl.rdf';
-
-$googleMapsKey = 'ABQIAAAAq_i4aTseMGLic8bgu1NQHRSEs_qikIHa8VCb2-5R0mAlXQZKPRRLkUrkPAVXUBMadjFafv4_Xrmr0g';
-
-/**
  * Automated version generator
  * $Id$
  */
@@ -35,74 +13,19 @@ preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
 
 /**
- * We're using RAP library for RDF parsing
+ * Configuration parameters
  */
-define('RDFAPI_INCLUDE_DIR', './rdfapi-php/');
-include(RDFAPI_INCLUDE_DIR . 'RdfAPI.php');
-
-#printStatement($statement);
-function printStatement($statement)
-{
-	echo "<div><h3>Triple:</h3>";
-	echo "<p>Subject: ".$statement->getLabelSubject()."</p>";
-	echo "<p>Predicate: ".$statement->getLabelPredicate()."</p>";
-	echo "<p>Object: ".$statement->getLabelObject()."</p>";
-	echo "<div>";
-}
-
-# helper function to insert language tab
-function xmlLang($lang)
-{
-	if ($lang)
-	{
-		return ' xml:lang="'.$lang.'"';
-	}
-	else
-	{
-		return '';
-	}
-}
-
-/*
- * Some namespace shortcuts
- */
-$foaf = 'http://xmlns.com/foaf/0.1/';
-$dc = 'http://purl.org/dc/elements/1.1/';
-
-#phpinfo(); exit;
+include_once('config.inc.php');
 
 /**
- * $model defines 
+ * Uncomment to enable debugging functionality
  */
-$model = ModelFactory::getDefaultModel();
-$model->load($profileDocument);
+#include_once('debug.php');
 
-/**
- * Let's get primary topic
- */
-$it = $model->findAsIterator(new Resource($profileDocument), new Resource($foaf.'primaryTopic'), NULL);
+include_once('global_functions.inc.php');
 
-$numberOfResults = 0;
-
-while ($it->hasNext()) {
-	$numberOfResults += 1;
-
-	$statement = $it->next();
-
-	$personURI = $statement->getObject();
-
-}
-
-if ($numberOfResults === 0)
-{
-	echo "[ERROR] No maker of foaf:PersonalProfileDocument defined";
-	return;
-}
-elseif ($numberOfResults > 1)
-{
-	echo "[ERROR] More then one maker of foaf:PersonalProfileDocument defined";
-	return;
-}
+$model = getModel();
+$personURI = getPrimaryPerson($model);
 
 /**
  * If we were called with the URI of the object (probable URL-rewritten in .htaccess) then do appropriate 303 redirect
@@ -117,7 +40,7 @@ if ($_SERVER["SCRIPT_URI"] == $personURI->getLabel())
 		);
 
 	// http://ptlis.net/source/php-content-negotiation/#v1.0.2
-	include 'content_negotiation.inc.php';
+	include_once('content_negotiation.inc.php');
 	$mimes = content_negotiation::mime_all_negotiation();
 
 	foreach ($mimes['type'] as $mime)
