@@ -7,7 +7,7 @@
  * Automated version generator
  * $Id$
  */
-$version = '0.2';
+$version = '0.3';
 
 preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
