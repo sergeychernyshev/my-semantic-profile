@@ -1,0 +1,7 @@
+AuthUserFile /www/data/.htpasswd
+AuthName "Private area"
+AuthType Basic
+<Limit GET POST>
+	require user sergey
+</Limit>
+

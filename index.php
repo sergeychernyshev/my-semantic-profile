@@ -72,8 +72,9 @@ header('Vary: Accept');
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body class="vcard" about="<?=$personURI->getLabel()?>">
-<h1><span class="fn" property="foaf:name<?=xmlLang($personName->getLanguage())?>"><?=$personName->getLabel()?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
-<?=$otherNamesText?>
+<div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
+<h1><span class="fn" property="foaf:name"<?=xmlLang($personName->getLanguage())?>><?=$personName->getLabel()?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
+<p><?=$otherNamesText?></p>
 <?
 
 /**
@@ -91,7 +92,8 @@ while ($it->hasNext()) {
 
 if (count($images) > 0)
 {
-	?><h2>Images</h2>
+?>
+<h2>Images</h2>
 <div id="images">
 <?
 
@@ -102,12 +104,12 @@ if (count($images) > 0)
 		$it = $model->findAsIterator($imageResource, new Resource($foaf.'thumbnail'), NULL);
 		if ($it->hasNext()) {
 			$statement = $it->next();
-			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$imageResource->getURI() ?>"/></a></span>
+			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$imageResource->getURI() ?>"/></a></span>
 <?
 		}
 		else
 		{
-			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? "$personName's photo" : 'photo')?>"/></a></span>
+			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>"/></a></span>
 <?
 		}
 	}
