@@ -80,7 +80,12 @@ class BasicInfoModule extends EditModule
 
 		foreach ($namestatements as $statement)
 		{
-			$model->remove($statement);
+			$name_lang = $statement->getObject()->getLanguage();
+
+			if ($name_lang == $language || ($name_lang =='' and $language == 'en'))
+			{
+				$model->remove($statement);
+			}
 		}
 
 		$new_names = $_REQUEST[$this->getSlug().'_name'];

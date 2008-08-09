@@ -41,25 +41,18 @@ while ($it->hasNext()) {
 $title = 'Profile';
 
 $namesText = '';
-$personName = '';
+$personName = null;
 
 if (count($names) > 0)
 {
-	$personName = $names[0]->getLabel();
-	$title = $personName."'s profile";
-
-	$first = true;
+	$personName = array_shift($names);
+	$title = $personName->getLabel()."'s profile";
 
 	foreach ($names as $name)
 	{
 		// apparently hCard allows only one fn (formatted name)
-		$namesText .= ($first ? '' : ' AKA ').'<span'.($first ? ' class="fn"' : '').' property="foaf:name"'.xmlLang($name->getLanguage()).'>'.$name->getLabel().'</span>';
-		$first = false;
+		$otherNamesText .= ' AKA <span property="foaf:name"'.xmlLang($name->getLanguage()).'>'.$name->getLabel().'</span>';
 	}
-}
-else
-{
-	$namesText = 'Unnamed';
 }
 
 header('Vary: Accept');
@@ -79,7 +72,8 @@ header('Vary: Accept');
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body class="vcard" about="<?=$personURI->getLabel()?>">
-<h1><?=$namesText?> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
+<h1><span class="fn" property="foaf:name<?=xmlLang($personName->getLanguage())?>"><?=$personName->getLabel()?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
+<?=$otherNamesText?>
 <?
 
 /**
@@ -211,14 +205,15 @@ if (count($people))
 {
 ?>
 <h2>People</h2>
-<div id="people"><ul><?
+<div id="people"><ul>
+<?
 
 	foreach ($people as $person)
         {
 		?><li rel="foaf:knows" resource="<?=$person['?uri']->getURI() ?>"><?
 		if ($person['?homepage'])
 		{
-			?><span rel="foaf:homepage" resource="<?=$person['?homepage']->getURI() ?>"/><a class="url" rel="contact" href="<?=$person['?homepage']->getURI() ?>"><?
+			?><span rel="foaf:homepage" resource="<?=$person['?homepage']->getURI() ?>"/><a rel="contact" href="<?=$person['?homepage']->getURI() ?>"><?
 		}
 
 		if ($person['?name'])
@@ -234,7 +229,8 @@ if (count($people))
 		{
 			?></a><?
 		}
-		?> <a href="<?=$person['?uri']->getURI() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></li><?
+		?> <a href="<?=$person['?uri']->getURI() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></li>
+<?
 	}
 ?></ul></div>
 <?
