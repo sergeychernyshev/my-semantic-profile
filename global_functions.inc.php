@@ -2,7 +2,7 @@
 /**
  * We're using RAP library for RDF parsing
  */
-define('RDFAPI_INCLUDE_DIR', './rdfapi-php/');
+define('RDFAPI_INCLUDE_DIR', $SPROOT.'./rdfapi-php/');
 include_once(RDFAPI_INCLUDE_DIR . 'RdfAPI.php');
 
 # helper function to insert language tab

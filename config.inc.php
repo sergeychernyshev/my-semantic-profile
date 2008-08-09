@@ -10,7 +10,7 @@ $defaultLanguage = 'en'; // this is used when literals don't define language spe
 /**
  * location of Personal Profile Document
  */
-$profileDocument = '../sergey.rdf';
+$profileDocument = $SPROOT.'../sergey.rdf';
 $profileDocumentURI = '/sergey.rdf';
 
 /**
