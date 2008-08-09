@@ -12,6 +12,7 @@ $defaultLanguage = 'en'; // this is used when literals don't define language spe
  */
 $profileDocument = $SPROOT.'../sergey.rdf';
 $profileDocumentURI = '/sergey.rdf';
+$profileDocumentType = 'rdf';
 
 /**
  * Uncomment for test cases

@@ -54,14 +54,14 @@ class BasicInfoModule extends EditModule
 			if ($name->getLanguage() == $language || ($name->getLanguage() == '' && $language == 'en'))
 			{
 			?>
-				<div><input type="text" name="<?=$this->getSlug()?>_name<?=$namenumber?>" value="<?=htmlspecialchars($name->getLabel())?>"/></div>
+				<div><input type="text" name="<?=$this->getSlug()?>_name[]" value="<?=htmlspecialchars($name->getLabel())?>"/></div>
 <?
 				$namenumber++;
 			}
 		}
 ?>
 		<div>
-		<input type="text" name="<?=$this->getSlug()?>_name<?=$namenumber?>" value=""/>
+		<input type="text" name="<?=$this->getSlug()?>_name[]" value=""/>
 		</div>
 
 		</div>
@@ -70,6 +70,28 @@ class BasicInfoModule extends EditModule
 
 	function saveChanges($model, $personURI, $language)
 	{
+		global $foaf;
+
+		$it = $model->findAsIterator($personURI, new Resource($foaf.'name'), NULL);
+		while ($it->hasNext())
+		{
+			$namestatements[] = $it->next();
+		}
+
+		foreach ($namestatements as $statement)
+		{
+			$model->remove($statement);
+		}
+
+		$new_names = $_REQUEST[$this->getSlug().'_name'];
+		foreach ($new_names as $name)
+		{
+			if ($name != '')
+			{
+				$model->add(new Statement($personURI, new Resource($foaf.'name'), new Literal($name, $language)));
+			}
+		}
+
 		return true;
 	}
 }

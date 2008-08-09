@@ -76,13 +76,12 @@ foreach ($languages as $language)
 </div>
 
 <?
-if (array_key_exists('save', $_POST))
+if (array_key_exists('save', $_REQUEST))
 {
-	if ($module->saveChanges($model, $personURI))
-	{
-		header( 'Location: ./?saved=success&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' )) ;
-		exit;
-	}
+	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel($model)) ? 'success' : 'failure';
+
+	header( 'Location: ./?saved='.$success.'&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' )) ;
+	exit;
 }
 
 $module->displayForm($model, $personURI, $lang);

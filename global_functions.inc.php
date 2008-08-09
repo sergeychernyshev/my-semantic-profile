@@ -5,6 +5,8 @@
 define('RDFAPI_INCLUDE_DIR', $SPROOT.'./rdfapi-php/');
 include_once(RDFAPI_INCLUDE_DIR . 'RdfAPI.php');
 
+define('MAXFILESIZE', 5000000);
+
 # helper function to insert language tab
 function xmlLang($lang)
 {
@@ -29,12 +31,32 @@ $dc = 'http://purl.org/dc/elements/1.1/';
  */
 function getModel()
 {
-	global $profileDocument;
+	global $profileDocument, $profileDocumentType;
 
 	$model = ModelFactory::getDefaultModel();
-	$model->load($profileDocument);
+
+	$docF = fopen($profileDocument, 'r');
+	$doc = fread($docF, MAXFILESIZE);
+	if (!feof($docF))
+	{
+		fclose($docF);
+		throw new Exception("[ERROR] RDF file is too big");
+	}
+	fclose($docF);
+
+	$model->loadFromString($doc, $profileDocumentType);
 
 	return $model;
+}
+
+/**
+ * Save model (supposedly updated one)
+ */
+function saveModel($model)
+{
+	global $profileDocument;
+
+	return $model->saveAs($profileDocument);
 }
 
 /**
@@ -42,20 +64,27 @@ function getModel()
  */
 function getPrimaryPerson($model)
 {
-	global $foaf, $profileDocument;
+	global $foaf;
 
-	$it = $model->findAsIterator(new Resource($profileDocument), new Resource($foaf.'primaryTopic'), NULL);
+	// dirty hack - RAP is adding # at the end of base URI
+	$docuri = $model->getBaseURI();
+	if (substr($docuri, -1) == '#')
+	{
+		$docuri = substr($docuri, 0, -1);
+	}
+
+	$it = $model->findAsIterator(new Resource($docuri), new Resource($foaf.'primaryTopic'), NULL);
 
 	if (!$it->hasNext())
 	{
-		throw "[ERROR] No maker of foaf:PersonalProfileDocument defined";
+		throw new Exception("[ERROR] No maker of foaf:PersonalProfileDocument defined: ".$docuri);
 	}
 
 	$statement = $it->next();
 
 	if ($it->hasNext())
 	{
-		throw "[ERROR] More then one maker of foaf:PersonalProfileDocument defined";
+		throw new Exception("[ERROR] More then one maker of foaf:PersonalProfileDocument defined");
 	}
 
 	return $statement->getObject();
