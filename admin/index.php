@@ -67,6 +67,8 @@ foreach ($languages as $language)
 }
 ?>
 </select>
+
+<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getLabel()?>">Main URI</a></span>
 </div>
 
 <?
