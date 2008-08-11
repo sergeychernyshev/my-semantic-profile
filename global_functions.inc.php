@@ -70,9 +70,9 @@ function getModel()
 /**
  * Save model (supposedly updated one)
  */
-function saveModel($model)
+function saveModel()
 {
-	global $profileDocument;
+	global $profileDocument, $model;
 
 	return $model->saveAs($profileDocument);
 }

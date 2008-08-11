@@ -72,7 +72,7 @@ foreach ($languages as $language)
 <?
 if (array_key_exists('save', $_REQUEST))
 {
-	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel($model)) ? 'success' : 'failure';
+	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel()) ? 'success' : 'failure';
 
 	header( 'Location: ./?saved='.$success.'&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' )) ;
 	exit;
