@@ -32,12 +32,6 @@ foreach ($modules as $mod)
 	}
 }
 
-$languages = array(
-	array('code' => 'en', 'label' => 'English'),
-	array('code' => 'ru', 'label' => 'Russian'),
-	array('code' => 'fr', 'label' => 'French')
-);
-
 $lang = $languages[0]['code'];
 
 if (array_key_exists('lang', $_REQUEST))

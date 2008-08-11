@@ -26,12 +26,30 @@ function xmlLang($lang)
 $foaf = 'http://xmlns.com/foaf/0.1/';
 $dc = 'http://purl.org/dc/elements/1.1/';
 
+/*
+ * A list of languages with their codes
+ * TODO - to automatically add languages that are listed in profile already but not in our list
+ * TODO - provide some autodetection functionality for languages passed by User-agent (browser)
+ */
+$languages = array(
+	array('code' => 'en', 'label' => 'English'),
+	array('code' => 'ru', 'label' => 'Russian'),
+	array('code' => 'fr', 'label' => 'French')
+);
+
 /**
  * Get the model object
  */
+$model = null; # using this for singleton operation
+
 function getModel()
 {
-	global $profileDocument, $profileDocumentType;
+	global $profileDocument, $profileDocumentType, $model;
+
+	if ($model != null)
+	{
+		return $model;
+	}
 
 	$model = ModelFactory::getDefaultModel();
 
