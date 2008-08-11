@@ -107,3 +107,14 @@ function getPrimaryPerson($model)
 
 	return $statement->getObject();
 }
+
+/**
+ * getLiteralLanguage
+ * Function that wraps the language call and returns default language ('en') if it's not defined
+ */
+function getLiteralLanguage($literal)
+{
+	$lang = $literal->getLanguage();
+
+	return ($lang == '' ? 'en' : $lang);
+}

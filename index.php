@@ -195,7 +195,7 @@ if (count($blogs))
 $query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 select ?name, ?homepage, ?uri
 where {
-<'.$personURI->getLabel().'> foaf:knows ?uri .
+<'.$personURI->getURI().'> foaf:knows ?uri .
 OPTIONAL { ?uri  foaf:homepage  ?homepage } .
 OPTIONAL { ?uri  foaf:name ?name }
 }';
@@ -241,7 +241,7 @@ if (count($people))
 $query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 select ?lat, ?lng
-where { <'.$personURI->getLabel().'> foaf:based_near ?point .
+where { <'.$personURI->getURI().'> foaf:based_near ?point .
 ?point  geo:lat  ?lat
 ?point  geo:long ?lng
 }';

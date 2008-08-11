@@ -26,7 +26,7 @@ $module = $modules[0];
 
 foreach ($modules as $mod)
 {
-	if ($mod->getSlug() == $_REQUEST['module'])
+	if (array_key_exists('module', $_REQUEST) && $mod->getSlug() == $_REQUEST['module'])
 	{
 		$module = $mod;
 	}
@@ -68,7 +68,7 @@ foreach ($languages as $language)
 ?>
 </select>
 
-<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getLabel()?>">Main URI</a></span>
+<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getURI()?>">Main URI</a></span>
 </div>
 
 <?
@@ -84,4 +84,3 @@ $module->displayForm($model, $personURI, $lang);
 ?>
 <input type="submit" name="save" value="Save changes">
 </form>
-<?
