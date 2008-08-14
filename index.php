@@ -148,10 +148,9 @@ foreach ($homepages as $homepage)
 
 if (count($homepages))
 {
-	?><h2>Sites</h2>
-<div id="sites"><ul><?
+	?><h2>Homepages</h2>
+<div id="homepages"><ul><?
 
-	# homepages
 	foreach ($homepagestodisplay as $homepage => $languages)
 	{
 		if (array_key_exists($lang, $languages))
@@ -166,7 +165,7 @@ if (count($homepages))
 		}
 		else	
 		{
-			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepage ?>" property="dc:title" href="<?=$homepage ?>"><?=$homepage ?></a></li>
+			?><li rel="foaf:homepage" href="<?=$homepage ?>"><a class="url" rel="me" href="<?=$homepage ?>"><?=$homepage ?></a></li>
 	<?
 		}
 	
@@ -179,41 +178,65 @@ if (count($homepages))
 
 $blogs = array();
 
-$it = $model->findAsIterator($personURI, new Resource($foaf.'weblog'), NULL);
-while ($it->hasNext()) {
-	$statement = $it->next();
-	$blogResource = $statement->getObject();
+$query = 'PREFIX foaf: <'.$foaf.'>
+PREFIX dc: <'.$dc.'>
+select ?blog, ?blogtitle
+where {
+<'.$personURI->getURI().'> foaf:weblog ?blog .
+OPTIONAL { ?blog dc:title ?blogtitle } 
+}';
+#echo "$query\n";
+$blogs = $model->sparqlQuery($query);
 
-	$blogs[] = $statement->getObject();
+foreach ($blogs as $blog)
+{
+	$blogstodisplay[$blog['?blog']->getURI()] = array();
+}
+
+foreach ($blogs as $blog)
+{
+	if ($blog['?blogtitle'])
+	{
+		$blogstodisplay[$blog['?blog']->getURI()][getLiteralLanguage($blog['?blogtitle'])] =
+			$blog['?blogtitle']->getLabel();
+	}
 }
 
 if (count($blogs))
 {
-?>
-<h2>Blogs</h2>
+	?><h2>Blogs</h2>
 <div id="blogs"><ul><?
 
-	# blogs
-	foreach ($blogs as $blogResource)
+	foreach ($blogstodisplay as $blog => $languages)
 	{
-		$it = $model->findAsIterator($blogResource, new Resource($dc.'title'), NULL);
-		if ($it->hasNext()) {
-			$statement = $it->next();
-			$blogtitle = $statement->getObject();
-			?><li rel="foaf:blog"><a class="url" href="<?=$blogResource->getURI() ?>" about="<?=$homepageResource->getURI() ?>" property="dc:title"<?=xmlLang($blogtitle->getLanguage()) ?>><?=$blogtitle->getLabel() ?></a></li>
-	<?
-		}
-		else
+		if (array_key_exists($lang, $languages))
 		{
-			?><li rel="foaf:blog"><a class="url" href="<?=$blogResource->getURI() ?>"><?=$blogResource->getURI() ?></a></li>
+			?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$blog ?>" property="dc:title" href="<?=$blog?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
 	<?
 		}
+		elseif (array_key_exists($defaultlang, $languages))
+		{
+			?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$blog ?>" property="dc:title" href="<?=$blog ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
+	<?
+		}
+		else	
+		{
+			?><li rel="foaf:weblog" href="<?=$blog ?>"><a class="url" rel="me" href="<?=$blog ?>"><?=$blog ?></a></li>
+	<?
+		}
+	
+		
 	}
 
 ?></ul></div>
 <?
 }
 
+
+
+/*
+ * People person knows
+ */
 $query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 select ?name, ?homepage, ?uri
 where {
