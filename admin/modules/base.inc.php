@@ -91,7 +91,7 @@ class BasicInfoModule extends EditModule
 
 		foreach ($homepages as $homepage)
         	{
-			if (array_key_exists('?homepagetitle', $homepage)
+			if ($homepage['?homepagetitle']
 				&& getLiteralLanguage($homepage['?homepagetitle']) == $language)
 			{
 				$homepagestoedit[$homepage['?homepage']->getURI()] = $homepage['?homepagetitle']->getLabel();
@@ -166,8 +166,6 @@ class BasicInfoModule extends EditModule
 			$new_homepages[$homepageurl][$language] = array_shift($new_homepagetitles); // they are always in pairs
 		}
 
-#		echo var_export($new_homepages); exit;
-
 		$it = $model->findAsIterator($personURI, new Resource($foaf.'homepage'), NULL);
 		while ($it->hasNext())
 		{
@@ -179,9 +177,11 @@ class BasicInfoModule extends EditModule
 			$homepageurl = $statement->getObject()->getURI();
 
 			/*
-			 * If this page was submitted, we at least need to preserve titles in other languages
+			 * If this page was among submitted pages, we at least need to preserve titles in other languages
 			 */
 			$preservetitles = array_key_exists($homepageurl, $new_homepages);
+
+			$homepagetitlestatements = array();
 
 			$it2 = $model->findAsIterator($statement->getObject(), new Resource($dc.'title'), NULL);
 			while ($it2->hasNext())
@@ -214,8 +214,6 @@ class BasicInfoModule extends EditModule
 			 */
 			$model->remove($statement);
 		}
-
-		#return true;
 
 		foreach ($new_homepages as $new_homepageurl => $new_homepage)
 		{
