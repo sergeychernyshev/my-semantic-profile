@@ -12,6 +12,7 @@ $version = '0.3';
 preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
 
+$SPROOT = './';
 /**
  * Configuration parameters
  */
@@ -27,6 +28,13 @@ include_once('global_functions.inc.php');
 $model = getModel();
 $personURI = getPrimaryPerson($model);
 
+$lang = $languages[0]['code'];
+
+if (array_key_exists('lang', $_REQUEST))
+{
+	$lang = $_REQUEST['lang'];
+}
+
 /**
  * Let's get person's name
  */
@@ -35,24 +43,28 @@ $names = array();
 $it = $model->findAsIterator($personURI, new Resource($foaf.'name'), NULL);
 while ($it->hasNext()) {
 	$statement = $it->next();
-	$names[] = $statement->getObject();
+	$name = $statement->getObject();
+	$names[getLiteralLanguage($name)][]=$name;
 }
 
 $title = 'Profile';
 
-$namesText = '';
+$otherNamesText = '';
 $personName = null;
 
-if (count($names) > 0)
+if (array_key_exists($lang, $names) && count($names[$lang]) > 0)
 {
-	$personName = array_shift($names);
-	$title = $personName->getLabel()."'s profile";
+	$personName = array_shift($names[$lang]);
 
-	foreach ($names as $name)
+	foreach ($names[$lang] as $name)
 	{
 		// apparently hCard allows only one fn (formatted name)
-		$otherNamesText .= ' AKA <span property="foaf:name"'.xmlLang($name->getLanguage()).'>'.$name->getLabel().'</span>';
+		$otherNamesText .= ' AKA <span property="foaf:name"'.xmlLang($lang).'>'.$name.'</span>';
 	}
+}
+elseif (array_key_exists($defaultlang, $names) && count($names[$defaultlang]) > 0)
+{
+	$personName = array_shift($names[$defaultlang]);
 }
 
 header('Vary: Accept');
@@ -64,16 +76,16 @@ header('Vary: Accept');
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 <head profile="http://www.w3.org/2006/03/hcard">
-	<title><?=$title ?></title>
+	<title><?=($personName ? $personName->getLabel() : 'Noname')?></title>
 	<link rel="meta" type="application/rdf+xml" title="FOAF" href="<?=$profileDocumentURI ?>" />
 	<link rel="alternate" type="application/rdf+xml" title="<?=$title ?> (RDF)" href="<?=$profileDocumentURI ?>" />
 	<link type="text/css" rel="stylesheet" href="floatbox/floatbox.css" />
 	<link type="text/css" rel="stylesheet" href="profile.css" />
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
-<body class="vcard" about="<?=$personURI->getLabel()?>">
+<body class="vcard" about="<?=$personURI->getURI()?>">
 <div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
-<h1><span class="fn" property="foaf:name"<?=xmlLang($personName->getLanguage())?>><?=$personName->getLabel()?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
+<h1><span class="fn" property="foaf:name"<?=xmlLang(getLiteralLanguage($personName))?>><?=($personName ? $personName->getLabel() : 'Noname')?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
 <p><?=$otherNamesText?></p>
 <?
 
@@ -82,13 +94,14 @@ header('Vary: Accept');
  */
 $images = array();
 
-$it = $model->findAsIterator($personURI, new Resource($foaf.'img'), NULL);
-while ($it->hasNext()) {
-	$statement = $it->next();
-	$images[] = array(
-		'resource' => $statement->getObject()
-		);
-}
+$query = 'PREFIX foaf: <'.$foaf.'>
+select ?image, ?thumbnail
+where {
+<'.$personURI->getURI().'> foaf:img ?image .
+OPTIONAL { ?image foaf:thumbnail $thumbnail } 
+}';
+#echo "$query\n";
+$images = $model->sparqlQuery($query);
 
 if (count($images) > 0)
 {
@@ -96,22 +109,10 @@ if (count($images) > 0)
 <h2>Images</h2>
 <div id="images">
 <?
-
 	foreach ($images as $image)
 	{
-		$imageResource = $image['resource'];
-
-		$it = $model->findAsIterator($imageResource, new Resource($foaf.'thumbnail'), NULL);
-		if ($it->hasNext()) {
-			$statement = $it->next();
-			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$statement->getObject()->getURI() ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$imageResource->getURI() ?>"/></a></span>
+		?><span rel="foaf:img" resource="<?=$image['?image']->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$image['?image']->getURI() ?>" title="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>"><img src="<?=($image['?thumbnail'] ? $image['?thumbnail']->getURI() : $image['?image']->getURI()) ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$image['?image']->getURI() ?>"/></a></span>
 <?
-		}
-		else
-		{
-			?><span rel="foaf:img" resource="<?=$imageResource->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$imageResource->getURI() ?>"><img src="<?=$imageResource->getURI() ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>"/></a></span>
-<?
-		}
 	}
 ?></div><?
 }
@@ -209,7 +210,6 @@ if (count($people))
 <h2>People</h2>
 <div id="people"><ul>
 <?
-
 	foreach ($people as $person)
         {
 		?><li rel="foaf:knows" resource="<?=$person['?uri']->getURI() ?>"><?
@@ -279,9 +279,9 @@ if (count($locations))
 
 ?>
 <div style="border-top: 1px solid silver; padding: 5px; align: center; margin-top: 20px">
-<a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>" title="Check XHTML + RDFa validity"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
-<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER["SCRIPT_URI"])?>" title="Extract RDF from RDFa on this page"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Extract RDF from RDFa on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
-<a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER["SCRIPT_URI"])?>" title="Show hCard information on this page"><img src="hcard.png" alt="Show hCard information on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Check XHTML + RDFa validity"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Extract RDF from RDFa on this page"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Extract RDF from RDFa on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Show hCard information on this page"><img src="hcard.png" alt="Show hCard information on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://gmpg.org/xfn/" title="XFN Homepage"><img src="xfn-btn.gif" alt="XFN" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://microformats.org/wiki/geo" title="Geo Microformat Page"><img src="geo.png" alt="geo" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 </div>

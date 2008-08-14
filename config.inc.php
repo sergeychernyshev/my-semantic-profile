@@ -22,3 +22,7 @@ $profileDocumentType = 'rdf';
 
 $googleMapsKey = 'ABQIAAAAq_i4aTseMGLic8bgu1NQHRSEs_qikIHa8VCb2-5R0mAlXQZKPRRLkUrkPAVXUBMadjFafv4_Xrmr0g';
 
+/*
+ * Default language
+ */
+$defaultlang = 'en';

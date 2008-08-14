@@ -114,7 +114,14 @@ function getPrimaryPerson($model)
  */
 function getLiteralLanguage($literal)
 {
+	global $defaultlang;
+
+	if (!$literal)
+	{
+		return $defaultlang;
+	}
+
 	$lang = $literal->getLanguage();
 
-	return ($lang == '' ? 'en' : $lang);
+	return ($lang == '' ? $defaultlang : $lang);
 }
