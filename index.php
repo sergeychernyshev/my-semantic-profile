@@ -59,7 +59,7 @@ if (array_key_exists($lang, $names) && count($names[$lang]) > 0)
 	foreach ($names[$lang] as $name)
 	{
 		// apparently hCard allows only one fn (formatted name)
-		$otherNamesText .= ' AKA <span property="foaf:name"'.xmlLang($lang).'>'.$name.'</span>';
+		$otherNamesText .= ' AKA <span property="foaf:name"'.xmlLang(getLiteralLanguage($name)).'>'.$name->getLabel().'</span>';
 	}
 }
 elseif (array_key_exists($defaultlang, $names) && count($names[$defaultlang]) > 0)
@@ -98,7 +98,7 @@ $query = 'PREFIX foaf: <'.$foaf.'>
 select ?image, ?thumbnail
 where {
 <'.$personURI->getURI().'> foaf:img ?image .
-OPTIONAL { ?image foaf:thumbnail $thumbnail } 
+OPTIONAL { ?image foaf:thumbnail ?thumbnail } 
 }';
 #echo "$query\n";
 $images = $model->sparqlQuery($query);
@@ -122,12 +122,59 @@ if (count($images) > 0)
  */
 $homepages = array();
 
-$it = $model->findAsIterator($personURI, new Resource($foaf.'homepage'), NULL);
-while ($it->hasNext()) {
-	$statement = $it->next();
-	$homepageResource = $statement->getObject();
+$query = 'PREFIX foaf: <'.$foaf.'>
+PREFIX dc: <'.$dc.'>
+select ?homepage, ?homepagetitle
+where {
+<'.$personURI->getURI().'> foaf:homepage ?homepage .
+OPTIONAL { ?homepage dc:title ?homepagetitle } 
+}';
+#echo "$query\n";
+$homepages = $model->sparqlQuery($query);
 
-	$homepages[] = $statement->getObject();
+foreach ($homepages as $homepage)
+{
+	$homepagestodisplay[$homepage['?homepage']->getURI()] = array();
+}
+
+foreach ($homepages as $homepage)
+{
+	if ($homepage['?homepagetitle'])
+	{
+		$homepagestodisplay[$homepage['?homepage']->getURI()][getLiteralLanguage($homepage['?homepagetitle'])] =
+			$homepage['?homepagetitle']->getLabel();
+	}
+}
+
+if (count($homepages))
+{
+	?><h2>Sites</h2>
+<div id="sites"><ul><?
+
+	# homepages
+	foreach ($homepagestodisplay as $homepage => $languages)
+	{
+		if (array_key_exists($lang, $languages))
+		{
+			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepage ?>" property="dc:title" href="<?=$homepage ?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
+	<?
+		}
+		elseif (array_key_exists($defaultlang, $languages))
+		{
+			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepage ?>" property="dc:title" href="<?=$homepage ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
+	<?
+		}
+		else	
+		{
+			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepage ?>" property="dc:title" href="<?=$homepage ?>"><?=$homepage ?></a></li>
+	<?
+		}
+	
+		
+	}
+
+?></ul></div>
+<?
 }
 
 $blogs = array();
@@ -138,32 +185,6 @@ while ($it->hasNext()) {
 	$blogResource = $statement->getObject();
 
 	$blogs[] = $statement->getObject();
-}
-
-if (count($homepages))
-{
-	?><h2>Sites</h2>
-<div id="sites"><ul><?
-
-	# homepages
-	foreach ($homepages as $homepageResource)
-	{
-		$it = $model->findAsIterator($homepageResource, new Resource($dc.'title'), NULL);
-		if ($it->hasNext()) {
-			$statement = $it->next();
-			$homepagetitle = $statement->getObject();
-			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepageResource->getURI() ?>" property="dc:title" href="<?=$homepageResource->getURI() ?>"<?=xmlLang($homepagetitle->getLanguage()) ?>><?=$homepagetitle->getLabel() ?></a></li>
-	<?
-		}
-		else
-		{
-			?><li rel="foaf:homepage"><a class="url" rel="me" href="<?=$homepageResource->getURI() ?>"><?=$homepageResource->getURI() ?></a></li>
-	<?
-		}
-	}
-
-?></ul></div>
-<?
 }
 
 if (count($blogs))
