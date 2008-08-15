@@ -28,7 +28,7 @@ include_once('global_functions.inc.php');
 $model = getModel();
 $personURI = getPrimaryPerson($model);
 
-$lang = $languages[0]['code'];
+$lang = $defaultlang;
 
 if (array_key_exists('lang', $_REQUEST))
 {
