@@ -125,3 +125,25 @@ function getLiteralLanguage($literal)
 
 	return ($lang == '' ? $defaultlang : $lang);
 }
+
+/*
+ * Function to return a hash of languages used within a model (xml:lang) as keys
+ */
+function getModelLanguages($model)
+{
+	$it = $model->getStatementIterator();
+
+	$lang = array();
+
+	while ($it->hasNext())
+	{
+		$obj = $it->next()->getObject();
+
+		if (is_a($obj, 'Literal'))
+		{
+			$lang[$obj->getLanguage()] = true;
+		}
+	}
+
+	return $lang;
+}

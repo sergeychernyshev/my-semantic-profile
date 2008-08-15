@@ -85,6 +85,42 @@ header('Vary: Accept');
 </head>
 <body class="vcard" about="<?=$personURI->getURI()?>">
 <div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
+<?
+$model_languages = getModelLanguages($model);
+
+unset($model_languages[$defaultlang]); // we'll show default language first
+unset($model_languages['']); // no need to show non-defined language (we assume it's the same as default)
+
+/*
+ * If there is more then one language present
+ */
+if (count($model_languages))
+{
+	?><div id="langnav">languages: <?
+	if ($lang == $defaultlang)
+	{
+		?><b><?=$defaultlang?></b><?	
+	}
+	else
+	{
+		?><a href="./"><?=$defaultlang?></a><?
+	}
+
+	foreach (array_keys($model_languages) as $l)
+	{
+		if ($l == $lang)
+		{
+			?> - <b><?=$l?></b><?
+		}
+		else
+		{
+			?> - <a href="?lang=<?=urlencode($l)?>"><?=$l?></a><?
+		}
+	}
+	?></div>
+<?
+}
+?>
 <h1><span class="fn" property="foaf:name"<?=xmlLang(getLiteralLanguage($personName))?>><?=($personName ? $personName->getLabel() : 'Noname')?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
 <p><?=$otherNamesText?></p>
 <?
