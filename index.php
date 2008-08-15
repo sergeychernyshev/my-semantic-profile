@@ -120,8 +120,10 @@ if (count($images) > 0)
 /**
  * Now let's prng person's links
  */
-$homepages = array();
 
+/*
+ * Homepages
+ */
 $query = 'PREFIX foaf: <'.$foaf.'>
 PREFIX dc: <'.$dc.'>
 select ?homepage, ?homepagetitle
@@ -146,7 +148,7 @@ foreach ($homepages as $homepage)
 	}
 }
 
-if (count($homepages))
+if (count($homepagestodisplay))
 {
 	?><h2>Homepages</h2>
 <div id="homepages"><ul><?
@@ -176,14 +178,15 @@ if (count($homepages))
 <?
 }
 
-$blogs = array();
-
+/*
+ * Blogs
+ */
 $query = 'PREFIX foaf: <'.$foaf.'>
 PREFIX dc: <'.$dc.'>
 select ?blog, ?blogtitle
 where {
 <'.$personURI->getURI().'> foaf:weblog ?blog .
-OPTIONAL { ?blog dc:title ?blogtitle } 
+OPTIONAL { ?blog dc:title ?blogtitle }
 }';
 #echo "$query\n";
 $blogs = $model->sparqlQuery($query);
@@ -202,7 +205,7 @@ foreach ($blogs as $blog)
 	}
 }
 
-if (count($blogs))
+if (count($blogstodisplay))
 {
 	?><h2>Blogs</h2>
 <div id="blogs"><ul><?
@@ -231,8 +234,6 @@ if (count($blogs))
 ?></ul></div>
 <?
 }
-
-
 
 /*
  * People person knows
