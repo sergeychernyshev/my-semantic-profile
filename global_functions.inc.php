@@ -53,14 +53,20 @@ function getModel()
 
 	$model = ModelFactory::getDefaultModel();
 
-	$docF = fopen($profileDocument, 'r');
-	$doc = fread($docF, MAXFILESIZE);
-	if (!feof($docF))
+	if (filesize($profileDocument) > MAXFILESIZE)
 	{
-		fclose($docF);
-		throw new Exception("[ERROR] RDF file is too big");
+		throw new Exception("[ERROR] RDF file is too big: $profileDocument (".MAXFILESIZE.")");
 	}
-	fclose($docF);
+
+	if ($docF = fopen($profileDocument, 'r'))
+	{
+		$doc = fread($docF, MAXFILESIZE);
+		fclose($docF);
+	}
+	else
+	{
+		throw new Exception("[ERROR] Can't open profile document: $profileDocument");
+	}
 
 	$model->loadFromString($doc, $profileDocumentType);
 
