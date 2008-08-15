@@ -31,11 +31,16 @@ $dc = 'http://purl.org/dc/elements/1.1/';
  * TODO - to automatically add languages that are listed in profile already but not in our list
  * TODO - provide some autodetection functionality for languages passed by User-agent (browser)
  */
-$languages = array(
-	array('code' => 'en', 'label' => 'English'),
-	array('code' => 'ru', 'label' => 'Russian'),
-	array('code' => 'fr', 'label' => 'French')
+$languageParams = array(
+	'en' => array('label' => 'English'),
+	'ru' => array('label' => 'Russian'),
+	'fr' => array('label' => 'French'),
+	'hu' => array('label' => 'Hungarian'),
+	'en-UK' => array('label' => 'English (UK)')
 );
+
+// language sequence
+$languageSequence = array('en', 'en-UK', 'ru', 'fr', 'hu');
 
 /**
  * Get the model object

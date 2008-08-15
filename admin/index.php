@@ -59,11 +59,45 @@ foreach ($modules as $mod)
 <?
 	}
 }
-?><select name="lang" onchange="location = './?<? if ($module != $modules[0]) { ?>module=<?=urlencode($module->getSlug())?>&<? } ?>lang='+this.options[this.selectedIndex].value;"><?
-foreach ($languages as $language)
+?><select name="lang" onchange="if (this.options[this.selectedIndex].value.indexOf('-') != 0) {location = './?<? if ($module != $modules[0]) { ?>module=<?=urlencode($module->getSlug())?>&<? } ?>lang='+this.options[this.selectedIndex].value; }"><?
+
+?><option value="<?=$defaultlang ?>"<? if ($lang == $defaultlang) { ?> selected<?}?>><?=(array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?
+
+$model_languages = getModelLanguages($model);
+
+unset($model_languages[$defaultlang]); // we'll show default language first
+unset($model_languages['']); // no need to show non-defined language (we assume it's the same as default)
+
+/*
+ * If there is more then one language present
+ */
+if (count($model_languages))
 {
-	?><option value="<?=$language['code'] ?>"<? if ($language['code'] == $lang) {?> selected<?}?>><?=$language['label'] ?></option>
+	foreach (array_keys($model_languages) as $l)
+	{
+		?><option value="<?=$l ?>"<? if ($lang == $l) {?> selected<?}?>><?=(array_key_exists($l, $languageParams) ? $languageParams[$l]['label'] : $l) ?></option><?
+	}
+}
+
+/*
+ * Now, if selected language is not default and not already in the model, then just show it
+ */
+if(!array_key_exists($lang, $model_languages) && $lang != $defaultlang)
+{
+	?><option value="<?=$language ?>" selected><?=(array_key_exists($lang, $languageParams) ? $languageParams[$lang]['label'] : $lang) ?></option><?
+}
+
+/*
+ * Show more languages we know about in the dropdown below
+ */
+?><option>-- add new --</option>
 <?
+foreach ($languageSequence as $language)
+{
+	if ($language != $defaultlang && !array_key_exists($language, $model_languages) && $language != $lang)
+	{
+		?><option value="<?=$language ?>"><?=$languageParams[$language]['label'] ?></option><?
+	}
 }
 ?>
 </select>
