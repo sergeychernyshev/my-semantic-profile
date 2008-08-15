@@ -92,8 +92,6 @@ header('Vary: Accept');
 /**
  * Let's get person's primary pictures (img) and show it's thumbnail if it exists or just resized it to 100 hight
  */
-$images = array();
-
 $query = 'PREFIX foaf: <'.$foaf.'>
 select ?image, ?thumbnail
 where {
@@ -103,7 +101,7 @@ OPTIONAL { ?image foaf:thumbnail ?thumbnail }
 #echo "$query\n";
 $images = $model->sparqlQuery($query);
 
-if (count($images) > 0)
+if ($images)
 {
 ?>
 <h2>Images</h2>
