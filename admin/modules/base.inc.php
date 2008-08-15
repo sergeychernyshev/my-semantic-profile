@@ -114,6 +114,50 @@ class BasicInfoModule extends EditModule
 		</div>
 
 		</div>
+		<h3>Blogs<h3>
+		<div id="<?=$this->getSlug()?>_blogs">
+<?
+		$query = '
+		PREFIX foaf: <'.$foaf.'>
+		PREFIX dc: <'.$dc.'>
+		select ?blog, ?blogtitle
+		where {
+		<'.$personURI->getURI().'> foaf:weblog ?blog .
+		OPTIONAL { ?blog dc:title ?blogtitle }
+		}';
+		#echo "$query\n";
+		$blogs = $model->sparqlQuery($query);
+
+		foreach ($blogs as $blog)
+        	{
+			$blogstoedit[$blog['?blog']->getURI()] = '';
+		}
+
+		foreach ($blogs as $blog)
+        	{
+			if ($blog['?blogtitle']
+				&& getLiteralLanguage($blog['?blogtitle']) == $language)
+			{
+				$blogstoedit[$blog['?blog']->getURI()] = $blog['?blogtitle']->getLabel();
+			}
+		}
+
+		foreach ($blogstoedit as $url => $title)
+		{
+?>
+			<div>
+			Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
+			URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
+			</div>
+<?
+		}
+?>
+		<div>
+		Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="" size="40"/>
+		URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="" size="60"/>
+		</div>
+
+		</div>
 		</div>
 <?
 	}
@@ -229,6 +273,90 @@ class BasicInfoModule extends EditModule
 				}
 			}
 		}
+
+		/*
+		 * Blogs 
+		 */
+		$new_blogs= array();
+		$new_blogurls = $_REQUEST[$this->getSlug().'_blogURL'];
+		$new_blogtitles = $_REQUEST[$this->getSlug().'_blogTitle'];
+
+		foreach($new_blogurls as $blogurl)
+		{
+			if ($blogurl == '')
+			{
+				array_shift($new_blogtitles);
+				continue;
+			}
+
+			$new_blogs[$blogurl][$language] = array_shift($new_blogtitles); // they are always in pairs
+		}
+
+		$it = $model->findAsIterator($personURI, new Resource($foaf.'weblog'), NULL);
+		while ($it->hasNext())
+		{
+			$blogstatements[] = $it->next();
+		}
+
+		foreach ($blogstatements as $statement)
+		{
+			$blogurl = $statement->getObject()->getURI();
+
+			/*
+			 * If this blog was among submitted blogs, we at least need to preserve titles in other languages
+			 */
+			$preservetitles = array_key_exists($blogurl, $new_blogs);
+
+			$blogtitlestatements = array();
+
+			$it2 = $model->findAsIterator($statement->getObject(), new Resource($dc.'title'), NULL);
+			while ($it2->hasNext())
+			{
+				$blogtitlestatements[] = $it2->next();
+			}
+
+			/*
+			 * Remove titles
+			 */
+			foreach ($blogtitlestatements as $titlestatement)
+			{
+				if ($preservetitles)
+				{
+					$title = $titlestatement->getObject();
+					/*
+					 * Only setting if in different language
+					 */
+					if (getLiteralLanguage($title) != $language)
+					{
+						$new_blogs[$blogurl][getLiteralLanguage($title)] = $title->getLabel();
+					}
+				}
+
+				$model->remove($titlestatement);
+			}
+
+			/*
+			 * Remove blog 
+			 */
+			$model->remove($statement);
+		}
+
+		foreach ($new_blogs as $new_blogurl => $new_blog)
+		{
+			$blogResource = new Resource($new_blogurl);
+
+			$model->add(new Statement($personURI, new Resource($foaf.'weblog'), $blogResource));
+
+			foreach ($new_blog as $titlelanguage => $blogtitle)
+			{
+				if ($blogtitle != '')
+				{
+					$model->add(new Statement($blogResource, new Resource($dc.'title'), new Literal($blogtitle, $titlelanguage)));
+				}
+			}
+		}
+
+
 		return true;
 	}
 }
