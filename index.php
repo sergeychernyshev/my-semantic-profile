@@ -28,6 +28,28 @@ include_once('global_functions.inc.php');
 $model = getModel();
 $personURI = getPrimaryPerson($model);
 
+if ($personURI == null)
+{
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<head profile="http://www.w3.org/2006/03/hcard">
+	<title>Can't find person</title>
+	<link type="text/css" rel="stylesheet" href="profile.css" />
+	<script type="text/javascript" src="floatbox/floatbox.js"></script>
+</head>
+<body>
+<div style="width: 300px; text-align: center; padding: 10px; border: 1px solid grey">
+<p>Can't find a person for this profile.<br/>
+<a href="admin/">Edit profile</a> to fix the problem.</p>
+<div><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
+</div>
+</body>
+</html>
+<?
+
+	exit;
+}
+
 $lang = $defaultlang;
 
 if (array_key_exists('lang', $_REQUEST))
