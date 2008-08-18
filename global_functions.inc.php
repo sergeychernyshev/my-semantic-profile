@@ -25,6 +25,7 @@ function xmlLang($lang)
  */
 $foaf = 'http://xmlns.com/foaf/0.1/';
 $dc = 'http://purl.org/dc/elements/1.1/';
+$rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 
 /*
  * A list of languages with their codes
@@ -106,7 +107,7 @@ function getPrimaryPerson($model)
 
 	if (!$it->hasNext())
 	{
-		throw new Exception("[ERROR] No maker of foaf:PersonalProfileDocument defined: ".$docuri);
+		return null;
 	}
 
 	$statement = $it->next();
