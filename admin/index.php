@@ -20,6 +20,12 @@ include_once('../global_functions.inc.php');
 $model = getModel();
 $personURI = getPrimaryPerson($model);
 
+if ($personURI == null)
+{
+	header( 'Location: ./init.php');
+	exit;
+}
+
 include_once('modules/base.inc.php');
 
 $module = $modules[0];
