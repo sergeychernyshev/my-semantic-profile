@@ -1,0 +1,18 @@
+Index: rdfapi-php/sparql/SparqlEngine.php
+===================================================================
+--- rdfapi-php/sparql/SparqlEngine.php	(revision 575)
++++ rdfapi-php/sparql/SparqlEngine.php	(working copy)
+@@ -409,12 +409,9 @@
+         if(!$finalRes && !$res)
+         return array();
+ 
+-        if(!$finalRes)
++        if(!$finalRes || !$res)
+         return $res;
+ 
+-        if(!$res)
+-        return $finalRes;
+-
+         // find joint variables and new variables to be added to $finalRes
+         $jointVars = array();
+         $newVars = array();
