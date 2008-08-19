@@ -313,6 +313,11 @@ if (count($people))
 <?
 	foreach ($people as $person)
         {
+		if (is_a($person['?uri'], 'BlankNode') && !$person['?homepage'])
+		{
+			continue;
+		}
+
 		?><li rel="foaf:knows" resource="<?=$person['?uri']->getURI() ?>"><?
 		if ($person['?homepage'])
 		{
@@ -332,8 +337,12 @@ if (count($people))
 		{
 			?></a><?
 		}
-		?> <a href="<?=$person['?uri']->getURI() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></li>
-<?
+
+		if (!is_a($person['?uri'], 'BlankNode'))
+		{
+			?> <a href="<?=$person['?uri']->getURI() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?
+		}
+		?></li><?
 	}
 ?></ul></div>
 <?
