@@ -108,7 +108,7 @@ foreach ($languageSequence as $language)
 ?>
 </select>
 
-<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getURI()?>">Main URI</a></span>
+<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getURI()?>">Person URI</a></span>
 </div>
 
 <?
