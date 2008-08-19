@@ -305,7 +305,7 @@ OPTIONAL { ?uri  foaf:name ?name }
 $people = $model->sparqlQuery($query);
 #echo var_export($people);
 
-if (count($people))
+if ($people)
 {
 ?>
 <h2>People</h2>
