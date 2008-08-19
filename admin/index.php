@@ -90,7 +90,7 @@ if (count($model_languages))
  */
 if(!array_key_exists($lang, $model_languages) && $lang != $defaultlang)
 {
-	?><option value="<?=$language ?>" selected><?=(array_key_exists($lang, $languageParams) ? $languageParams[$lang]['label'] : $lang) ?></option><?
+	?><option value="<?=$lang?>" selected><?=(array_key_exists($lang, $languageParams) ? $languageParams[$lang]['label'] : $lang) ?></option><?
 }
 
 /*
