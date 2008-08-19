@@ -359,7 +359,7 @@ where { <'.$personURI->getURI().'> foaf:based_near ?point .
 $locations = $model->sparqlQuery($query);
 #echo var_export($locations);
 
-if (count($locations))
+if ($locations)
 {
 ?><h2>Location</h2>
 <div id="location">
