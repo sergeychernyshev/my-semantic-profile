@@ -65,7 +65,7 @@ foreach ($modules as $mod)
 <?
 	}
 }
-?><select name="lang" onchange="if (this.options[this.selectedIndex].value.indexOf('-') != 0) {location = './?<? if ($module != $modules[0]) { ?>module=<?=urlencode($module->getSlug())?>&<? } ?>lang='+this.options[this.selectedIndex].value; }"><?
+?><select name="lang" onchange="if (this.options[this.selectedIndex].value.indexOf('-') == 0) { lang=prompt('Enter language code')}else{lang=this.options[this.selectedIndex].value;}; location = './?<? if ($module != $modules[0]) { ?>module=<?=urlencode($module->getSlug())?>&<? } ?>lang='+lang; }"><?
 
 ?><option value="<?=$defaultlang ?>"<? if ($lang == $defaultlang) { ?> selected<?}?>><?=(array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?
 
