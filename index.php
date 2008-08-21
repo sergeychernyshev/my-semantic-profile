@@ -1,16 +1,8 @@
 <?
 /**
  * This program helps manage person's user profile using Semantic Web standards such as FOAF
- */
-
-/**
- * Automated version generator
  * $Id$
  */
-$version = '0.3.1';
-
-preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
-$build = $matches[1];
 
 $SPROOT = './';
 /**
@@ -395,6 +387,6 @@ if ($locations)
 <a href="http://gmpg.org/xfn/" title="XFN Homepage"><img src="xfn-btn.gif" alt="XFN" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://microformats.org/wiki/geo" title="Geo Microformat Page"><img src="geo.png" alt="geo" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 </div>
-<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Created with <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?=$version?> r<?=$build?>)</div>
+<div style="border-top: 1px solid silver; padding: 5px; align: center; font-size: small; text-align: center">Powered by <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?=$version?> r<?=$build?>)</div>
 </body>
 </html>

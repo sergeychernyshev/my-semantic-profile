@@ -63,3 +63,13 @@ form {
 	background: white;
 	font-size: 20px;
 }
+
+#footer {
+	color: #f0e39e;
+	font-size: small;
+	text-align: center;
+}
+
+#footer a {
+	color: white;
+}

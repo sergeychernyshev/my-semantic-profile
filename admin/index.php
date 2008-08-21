@@ -140,5 +140,6 @@ $module->displayForm($model, $personURI, $lang);
 </div>
 <div id="formbottom"><input type="submit" name="save" value="Save changes"></div>
 </form>
+<div id="footer">Powered by <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?=$version?> r<?=$build?>)</div>
 </body>
 </html>
