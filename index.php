@@ -305,7 +305,7 @@ if ($people)
 <?
 	foreach ($people as $person)
         {
-		if (is_a($person['?uri'], 'BlankNode') && !$person['?homepage'])
+		if (is_a($person['?uri'], 'BlankNode') && !$person['?homepage'] && !$person['?name'])
 		{
 			continue;
 		}
