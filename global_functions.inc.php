@@ -50,6 +50,9 @@ function getModel()
 	}
 
 	$model = ModelFactory::getDefaultModel();
+	$model->addNamespace('foaf', $foaf);
+	$model->addNamespace('dc', $dc);
+	$model->addNamespace('rdf', $rdf);
 
 	if (filesize($profileDocument) > MAXFILESIZE)
 	{
