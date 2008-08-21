@@ -70,8 +70,18 @@ if (array_key_exists('save', $_REQUEST))
 	header( 'Location: ./init.php?saved='.$success );
 	exit;
 }
-?>
-<h1>Initialize profile</h1>
+?><html>
+<head>
+	<title>Inititalize profile</title>
+	<link type="text/css" rel="stylesheet" href="admin.css" />
+	<script type="text/javascript" src="admin.js"></script>
+</head>
+<body>
+<div id="navigation">
+<span class="activetab">Initialize profile</span>
+</div>
+<div id="module">
+<div id="title">Initialize profile</div>
 Profile has no person associated with it.
 
 <form action="" method="POST">
@@ -110,5 +120,8 @@ if (count($people))
 <input type="text" size="80" name="init_person_uri" value="<?=htmlspecialchars($baseURL.'i')?>">
 <input type="hidden" name="init_default_person_uri" value="<?=htmlspecialchars($baseURL.'i')?>">
 
-<p><input type="submit" name="save" value="Save changes"></p>
+</div>
+<div id="formbottom"><input type="submit" name="save" value="Save changes"></div>
 </form>
+</body>
+</html>

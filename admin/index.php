@@ -45,18 +45,35 @@ if (array_key_exists('lang', $_REQUEST))
 	$lang = $_REQUEST['lang'];
 }
 
+if (array_key_exists('save', $_REQUEST))
+{
+	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel()) ? 'success' : 'failure';
+
+	header( 'Location: ./?saved='.$success.'&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' )) ;
+	exit;
+}
+
+
 /**
  * Displaying tabs with module names linking to modules
  */
-?><div id="navigation">
+?><html>
+<head>
+	<title>Edit profile</title>
+	<link type="text/css" rel="stylesheet" href="admin.css" />
+	<script type="text/javascript" src="admin.js"></script>
+</head>
+<body>
 <form action="./" method="POST">
+<div id="navigation">
 <input name="module" type="hidden" value="<?=urlencode($module->getSlug())?>">
+<span class="moduletabs">
 <?
 foreach ($modules as $mod)
 {
 	if ($mod == $module)
 	{
-		?><span class="active tab" id="nav_<?=$mod->getSlug()?>"><?=$mod->getName()?></span>
+		?><span class="activetab" id="nav_<?=$mod->getSlug()?>"><?=$mod->getName()?></span>
 <?
 	}
 	else
@@ -65,9 +82,14 @@ foreach ($modules as $mod)
 <?
 	}
 }
-?><select name="lang" onchange="if (this.options[this.selectedIndex].value.indexOf('-') == 0) { lang=prompt('Enter language code')}else{lang=this.options[this.selectedIndex].value;}; location = './?<? if ($module != $modules[0]) { ?>module=<?=urlencode($module->getSlug())?>&<? } ?>lang='+lang; }"><?
+?></span><select name="lang" onchange="switchLanguage(this.options[this.selectedIndex].value, '<?
+if ($module != $modules[0])
+{
+	echo urlencode($module->getSlug());
+}
+?>', '<?=urlencode($defaultlang)?>');">
 
-?><option value="<?=$defaultlang ?>"<? if ($lang == $defaultlang) { ?> selected<?}?>><?=(array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?
+<option value="<?=$defaultlang ?>"<? if ($lang == $defaultlang) { ?> selected<?}?>><?=(array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?
 
 $model_languages = getModelLanguages($model);
 
@@ -110,17 +132,13 @@ foreach ($languageSequence as $language)
 
 <span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getURI()?>">Person URI</a></span>
 </div>
-
+<div id="module">
+<div id="title"><?=$module->getName()?></div>
 <?
-if (array_key_exists('save', $_REQUEST))
-{
-	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel()) ? 'success' : 'failure';
-
-	header( 'Location: ./?saved='.$success.'&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' )) ;
-	exit;
-}
-
 $module->displayForm($model, $personURI, $lang);
 ?>
-<input type="submit" name="save" value="Save changes">
+</div>
+<div id="formbottom"><input type="submit" name="save" value="Save changes"></div>
 </form>
+</body>
+</html>
