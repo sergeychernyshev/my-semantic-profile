@@ -2,6 +2,7 @@
 
 $modules = array(
 	new BasicInfoModule(),
+	new PeopleModule(),
 	new GeoLocationModule()
 );
 
@@ -371,5 +372,18 @@ class GeoLocationModule extends EditModule
 	function getSlug()
 	{
 		return "geo";
+	}
+}
+
+class PeopleModule extends EditModule
+{
+	function getName()
+	{
+		return "People";
+	}
+
+	function getSlug()
+	{
+		return "people";
 	}
 }
