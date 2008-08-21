@@ -1,5 +1,13 @@
 <?
 /**
+ * Automated version generator
+ */
+$version = '0.3.1';
+
+preg_match('$'.'Rev: (\d+) $', '$Rev: 56 $', $matches);
+$build = $matches[1];
+
+/**
  * We're using RAP library for RDF parsing
  */
 define('RDFAPI_INCLUDE_DIR', $SPROOT.'./rdfapi-php/');
