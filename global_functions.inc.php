@@ -4,7 +4,7 @@
  */
 $version = '0.3.1';
 
-preg_match('$'.'Rev: (\d+) $', '$Rev: 56 $', $matches);
+preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
 
 /**
