@@ -8,7 +8,7 @@ class PicturesModule extends EditModule
 
 	function getSlug()
 	{
-		return "pics";
+		return "pictures";
 	}
 }
 

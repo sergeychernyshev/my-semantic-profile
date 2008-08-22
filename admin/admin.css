@@ -73,3 +73,26 @@ form {
 #footer a {
 	color: white;
 }
+
+#message {
+	margin: 10px;
+	padding: 10px;
+}
+
+#message.savesuccess {
+	background: #2D8F2C;
+	font-size: x-large;
+	color: #FFFF88;
+	border: 1px solid green;
+}
+
+#message.savefailure {
+	background: red;
+	font-size: x-large;
+	color: #FFFF88;
+	border: 1px solid #BF0000;
+}
+
+#messageicon {
+	vertical-align: middle;
+}

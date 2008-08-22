@@ -135,6 +135,20 @@ foreach ($languageSequence as $language)
 <div id="module">
 <div id="title"><?=$module->getName()?></div>
 <?
+if (array_key_exists('saved', $_REQUEST))
+{
+	?><div id="message" class="save<?=($_REQUEST['saved'] == 'success' ? 'success' : 'failure')?>"><?
+	if($_REQUEST['saved'] == 'success')
+	{
+		?><img id="messageicon" src="yes.png"> Changes were successfully saved<?
+	}
+	else
+	{
+		?><img id="messageicon" src="no.png"> There was a problem saving changes<?
+	}
+	?></div><?
+}
+
 $module->displayForm($model, $personURI, $lang);
 ?>
 </div>
