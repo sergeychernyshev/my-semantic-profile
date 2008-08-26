@@ -1,14 +1,14 @@
 <? // $Id$
-class TriplesModule extends EditModule
+class RDFXMLModule extends EditModule
 {
 	function getName()
 	{
-		return "Triples";
+		return "RDF/XML";
 	}
 
 	function getSlug()
 	{
-		return "triples";
+		return "rdfxml";
 	}
 
 	function displayForm($model, $personURI, $language)
@@ -18,8 +18,7 @@ class TriplesModule extends EditModule
 		/*
 		 * URI
 		 */
-		?><h2>RDF/XML</h3>
-		<div id="<?=$this->getSlug()?>_rdfxml">
+		?><div id="<?=$this->getSlug()?>_rdfxml">
 		<textarea name="<?=$this->getSlug()?>_triples" style="width: 100%" rows="25"><?=htmlspecialchars($rdf)?></textarea>
 		</div>
 <?
@@ -46,4 +45,4 @@ class TriplesModule extends EditModule
 	}
 }
 
-$modules[] = new TriplesModule();
+$modules[] = new RDFXMLModule();
