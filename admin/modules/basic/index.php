@@ -53,6 +53,22 @@ class BasicInfoModule extends EditModule
 		</div>
 		</div>
 
+		<h2>OpedID</h2>
+		<div id="<?=$this->getSlug()?>_openid">
+<?
+		$it = $model->findAsIterator($personURI, new Resource($foaf.'openid'), NULL);
+		while ($it->hasNext()) {
+			$statement = $it->next();
+			$openid = $statement->getObject();
+
+			?><div><input type="text" name="<?=$this->getSlug()?>_openid[]" value="<?=htmlspecialchars($openid->getURI())?>" size="60"/></div><?
+		}
+?>
+		<div>
+		<input type="text" name="<?=$this->getSlug()?>_openid[]" value="" size="60"/>
+		</div>
+		</div>
+
 		<h2>Sites</h2>
 		<div id="<?=$this->getSlug()?>_sites">
 		<h3>Home pages</h3>
@@ -186,6 +202,25 @@ class BasicInfoModule extends EditModule
 			if ($name != '')
 			{
 				$model->add(new Statement($personURI, new Resource($foaf.'name'), new Literal($name, $language)));
+			}
+		}
+
+
+		/*
+		 * OpenIDs
+		 */
+		$it = $model->findAsIterator($personURI, new Resource($foaf.'openid'), NULL);
+		while ($it->hasNext())
+		{
+			$model->remove($it->next());
+		}
+
+		$new_openids = $_REQUEST[$this->getSlug().'_openid'];
+		foreach ($new_openids as $openid)
+		{
+			if ($openid != '')
+			{
+				$model->add(new Statement($personURI, new Resource($foaf.'openid'), new Resource($openid)));
 			}
 		}
 
