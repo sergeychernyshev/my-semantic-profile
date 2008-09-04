@@ -1,4 +1,4 @@
-function switchLanguage(langval, module, defaultlang)
+function switchLanguage(langval, module, defaultlang, personURI)
 {
 	var lang;
 
@@ -29,6 +29,12 @@ function switchLanguage(langval, module, defaultlang)
 	if (module)
 	{
 		newlocation += sep+'module='+module;
+		sep = '&';
+	}
+
+	if (personURI)
+	{
+		newlocation += sep+'personURI='+personURI;
 		sep = '&';
 	}
 
