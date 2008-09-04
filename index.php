@@ -182,21 +182,23 @@ OPTIONAL { ?homepage dc:title ?homepagetitle }
 #echo "$query\n";
 $homepages = $model->sparqlQuery($query);
 
-foreach ($homepages as $homepage)
+if ($homepages)
 {
-	$homepagestodisplay[$homepage['?homepage']->getURI()] = array();
-}
-
-foreach ($homepages as $homepage)
-{
-	if ($homepage['?homepagetitle'])
+	foreach ($homepages as $homepage)
 	{
-		$homepagestodisplay[$homepage['?homepage']->getURI()][getLiteralLanguage($homepage['?homepagetitle'])] =
-			$homepage['?homepagetitle']->getLabel();
+		$homepagestodisplay[$homepage['?homepage']->getURI()] = array();
+	}
+
+	foreach ($homepages as $homepage)
+	{
+		if ($homepage['?homepagetitle'])
+		{
+			$homepagestodisplay[$homepage['?homepage']->getURI()][getLiteralLanguage($homepage['?homepagetitle'])] = $homepage['?homepagetitle']->getLabel();
+		}
 	}
 }
 
-if (count($homepagestodisplay))
+if ($homepages && count($homepagestodisplay))
 {
 	?><h2>Homepages</h2>
 <div id="homepages"><ul><?
@@ -239,21 +241,24 @@ OPTIONAL { ?blog dc:title ?blogtitle }
 #echo "$query\n";
 $blogs = $model->sparqlQuery($query);
 
-foreach ($blogs as $blog)
+if ($blogs)
 {
-	$blogstodisplay[$blog['?blog']->getURI()] = array();
-}
-
-foreach ($blogs as $blog)
-{
-	if ($blog['?blogtitle'])
+	foreach ($blogs as $blog)
 	{
-		$blogstodisplay[$blog['?blog']->getURI()][getLiteralLanguage($blog['?blogtitle'])] =
-			$blog['?blogtitle']->getLabel();
+		$blogstodisplay[$blog['?blog']->getURI()] = array();
+	}
+
+	foreach ($blogs as $blog)
+	{
+		if ($blog['?blogtitle'])
+		{
+			$blogstodisplay[$blog['?blog']->getURI()][getLiteralLanguage($blog['?blogtitle'])] =
+				$blog['?blogtitle']->getLabel();
+		}
 	}
 }
 
-if (count($blogstodisplay))
+if ($blogs && count($blogstodisplay))
 {
 	?><h2>Blogs</h2>
 <div id="blogs"><ul><?
