@@ -42,7 +42,7 @@ $model = null; # using this for singleton operation
 
 function getModel()
 {
-	global $profileDocument, $profileDocumentType, $model;
+	global $profileDocument, $profileDocumentType, $model, $foaf, $dc, $rdf;
 
 	if ($model != null)
 	{
