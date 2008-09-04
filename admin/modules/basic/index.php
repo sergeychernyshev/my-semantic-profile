@@ -169,7 +169,7 @@ class BasicInfoModule extends EditModule
 <?
 	}
 
-	function saveChanges($model, $personURI, $language)
+	function saveChanges($model, &$personURI, $language)
 	{
 		global $foaf, $dc;
 
