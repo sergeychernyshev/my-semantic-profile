@@ -18,12 +18,23 @@ include_once('../config.inc.php');
 include_once('../global_functions.inc.php');
 
 $model = getModel();
-$personURI = getPrimaryPerson($model);
 
-if ($personURI == null)
+if (isset($_REQUEST['personURI']))
 {
-	header( 'Location: ./init.php');
-	exit;
+	$personURI = new Resource($_REQUEST['personURI']);
+	$defaultPerson = false;
+}
+else
+{
+	$personURI = getPrimaryPerson($model);
+
+	if ($personURI == null)
+	{
+		header( 'Location: ./init.php');
+		exit;
+	}
+
+	$defaultPerson = true;
 }
 
 include_once('modules/base.inc.php');
@@ -78,7 +89,7 @@ foreach ($modules as $mod)
 	}
 	else
 	{
-		?><a class="tab" id="nav_<?=$mod->getSlug()?>" href="./?<? if ($mod != $modules[0]) { ?>module=<?=urlencode($mod->getSlug())?><? } ?>&lang=<?=$lang?>"><?=$mod->getName()?></a>
+		?><a class="tab" id="nav_<?=$mod->getSlug()?>" href="./?<? if ($mod != $modules[0]) { ?>module=<?=urlencode($mod->getSlug())?><? } ?>&lang=<?=$lang?><? if (!$defaultPerson) { echo '&personURI='.htmlspecialchars($personURI->getURI()); } ?>"><?=$mod->getName()?></a>
 <?
 	}
 }
@@ -87,7 +98,12 @@ if ($module != $modules[0])
 {
 	echo urlencode($module->getSlug());
 }
-?>', '<?=urlencode($defaultlang)?>');">
+?>', '<?=urlencode($defaultlang)?>', '<?
+if (!$defaultPerson)
+{
+	echo urlencode($personURI->getURI());
+}
+?>');">
 
 <option value="<?=$defaultlang ?>"<? if ($lang == $defaultlang) { ?> selected<?}?>><?=(array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?
 
@@ -133,8 +149,14 @@ foreach ($languageSequence as $language)
 <span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getURI()?>">Person URI</a></span>
 </div>
 <div id="module">
-<div id="title"><?=$module->getName()?></div>
-<?
+<div id="title"><?=$module->getName()?></div><?
+if (!$defaultPerson)
+{
+	?><div class="personURI">Editing <b><?=htmlspecialchars($personURI->getURI())?></b> (<a href="./">go back</a>)</div>
+	<input type="hidden" name="personURI" value="<?=htmlspecialchars($personURI->getURI())?>">
+	<?
+}
+
 if (array_key_exists('saved', $_REQUEST))
 {
 	?><div id="message" class="save<?=($_REQUEST['saved'] == 'success' ? 'success' : 'failure')?>"><?
