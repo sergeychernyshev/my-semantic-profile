@@ -60,7 +60,7 @@ if (array_key_exists('save', $_REQUEST))
 {
 	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel()) ? 'success' : 'failure';
 
-	header( 'Location: ./?saved='.$success.'&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' )) ;
+	header( 'Location: ./?saved='.$success.'&lang='.$lang.($module != $modules[0] ? '&module='.urlencode($module->getSlug()) : '' ).(!$defaultPerson ? '&personURI='.urlencode($personURI->getURI()) : '')) ;
 	exit;
 }
 
@@ -89,7 +89,7 @@ foreach ($modules as $mod)
 	}
 	else
 	{
-		?><a class="tab" id="nav_<?=$mod->getSlug()?>" href="./?<? if ($mod != $modules[0]) { ?>module=<?=urlencode($mod->getSlug())?><? } ?>&lang=<?=$lang?><? if (!$defaultPerson) { echo '&personURI='.htmlspecialchars($personURI->getURI()); } ?>"><?=$mod->getName()?></a>
+		?><a class="tab" id="nav_<?=$mod->getSlug()?>" href="./?<? if ($mod != $modules[0]) { ?>module=<?=urlencode($mod->getSlug())?><? } ?>&lang=<?=$lang?><? if (!$defaultPerson) { echo '&personURI='.urlencode($personURI->getURI()); } ?>"><?=$mod->getName()?></a>
 <?
 	}
 }
