@@ -85,28 +85,31 @@ class BasicInfoModule extends EditModule
 		#echo "$query\n";
 		$homepages = $model->sparqlQuery($query);
 
-		foreach ($homepages as $homepage)
-        	{
-			$homepagestoedit[$homepage['?homepage']->getURI()] = '';
-		}
-
-		foreach ($homepages as $homepage)
-        	{
-			if ($homepage['?homepagetitle']
-				&& getLiteralLanguage($homepage['?homepagetitle']) == $language)
-			{
-				$homepagestoedit[$homepage['?homepage']->getURI()] = $homepage['?homepagetitle']->getLabel();
-			}
-		}
-
-		foreach ($homepagestoedit as $url => $title)
+		if ($homepages)
 		{
+			foreach ($homepages as $homepage)
+			{
+				$homepagestoedit[$homepage['?homepage']->getURI()] = '';
+			}
+
+			foreach ($homepages as $homepage)
+			{
+				if ($homepage['?homepagetitle']
+					&& getLiteralLanguage($homepage['?homepagetitle']) == $language)
+				{
+					$homepagestoedit[$homepage['?homepage']->getURI()] = $homepage['?homepagetitle']->getLabel();
+				}
+			}
+
+			foreach ($homepagestoedit as $url => $title)
+			{
 ?>
-			<div>
-			Title: <input type="text" name="<?=$this->getSlug()?>_homepageTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
-			URL: <input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
-			</div>
+				<div>
+				Title: <input type="text" name="<?=$this->getSlug()?>_homepageTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
+				URL: <input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
+				</div>
 <?
+			}
 		}
 ?>
 		<div>
@@ -129,28 +132,31 @@ class BasicInfoModule extends EditModule
 		#echo "$query\n";
 		$blogs = $model->sparqlQuery($query);
 
-		foreach ($blogs as $blog)
-        	{
-			$blogstoedit[$blog['?blog']->getURI()] = '';
-		}
-
-		foreach ($blogs as $blog)
-        	{
-			if ($blog['?blogtitle']
-				&& getLiteralLanguage($blog['?blogtitle']) == $language)
-			{
-				$blogstoedit[$blog['?blog']->getURI()] = $blog['?blogtitle']->getLabel();
-			}
-		}
-
-		foreach ($blogstoedit as $url => $title)
+		if ($blogs)
 		{
+			foreach ($blogs as $blog)
+        		{
+				$blogstoedit[$blog['?blog']->getURI()] = '';
+			}
+
+			foreach ($blogs as $blog)
+        		{
+				if ($blog['?blogtitle']
+					&& getLiteralLanguage($blog['?blogtitle']) == $language)
+				{
+					$blogstoedit[$blog['?blog']->getURI()] = $blog['?blogtitle']->getLabel();
+				}
+			}
+
+			foreach ($blogstoedit as $url => $title)
+			{
 ?>
 			<div>
-			Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
-			URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
-			</div>
+				Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
+				URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
+				</div>
 <?
+			}
 		}
 ?>
 		<div>
