@@ -34,6 +34,7 @@ function xmlLang($lang)
 $foaf = 'http://xmlns.com/foaf/0.1/';
 $dc = 'http://purl.org/dc/elements/1.1/';
 $rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+$rdfs = 'http://www.w3.org/2000/01/rdf-schema#';
 $iana = 'http://www.iana.org/assignments/relation/';
 $awol = 'http://bblfish.net/work/atom-owl/2006-06-06/#';
 
@@ -44,7 +45,7 @@ $model = null; # using this for singleton operation
 
 function getModel()
 {
-	global $profileDocument, $profileDocumentType, $model, $foaf, $dc, $rdf, $iana, $awol;
+	global $profileDocument, $profileDocumentType, $model, $foaf, $dc, $rdf, $rdfs, $iana, $awol;
 
 	if ($model != null)
 	{
@@ -53,6 +54,7 @@ function getModel()
 
 	$model = ModelFactory::getDefaultModel();
 	$model->addNamespace('rdf', $rdf);
+	$model->addNamespace('rdfs', $rdfs);
 	$model->addNamespace('foaf', $foaf);
 	$model->addNamespace('dc', $dc);
 	$model->addNamespace('iana', $iana);

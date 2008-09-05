@@ -58,7 +58,10 @@ if (array_key_exists('lang', $_REQUEST))
 
 if (array_key_exists('save', $_REQUEST))
 {
-	updateProfileData();
+	if ($defaultPerson)
+	{
+		updateProfileData();
+	}
 
 	$success = ($module->saveChanges($model, $personURI, $lang) && saveModel()) ? 'success' : 'failure';
 

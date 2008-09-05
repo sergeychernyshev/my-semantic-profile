@@ -13,7 +13,7 @@ class BasicInfoModule extends EditModule
 
 	function displayForm($model, $personURI, $language)
 	{
-		global $foaf, $dc;
+		global $foaf, $dc, $rdfs;
 
 		/*
 		 * URI
@@ -166,12 +166,29 @@ class BasicInfoModule extends EditModule
 
 		</div>
 		</div>
+
+		<h2>Additional Resources</h2>
+		Resources to be added as rdfs:seeAlso
+		<div id="<?=$this->getSlug()?>_seealso">
+<?
+		$it = $model->findAsIterator($personURI, new Resource($rdfs.'seeAlso'), NULL);
+		while ($it->hasNext()) {
+			$statement = $it->next();
+			$seealso= $statement->getObject();
+
+			?><div><input type="text" name="<?=$this->getSlug()?>_seealso[]" value="<?=htmlspecialchars($seealso->getURI())?>" size="60"/></div><?
+		}
+?>
+		<div>
+		<input type="text" name="<?=$this->getSlug()?>_seealso[]" value="" size="60"/>
+		</div>
+		</div>
 <?
 	}
 
 	function saveChanges($model, &$personURI, $language)
 	{
-		global $foaf, $dc;
+		global $foaf, $dc, $rdfs;
 
 		/*
 		 * URI
@@ -394,6 +411,23 @@ class BasicInfoModule extends EditModule
 			}
 		}
 
+		/*
+		 * seeAlso 
+		 */
+		$it = $model->findAsIterator($personURI, new Resource($rdfs.'seeAlso'), NULL);
+		while ($it->hasNext())
+		{
+			$model->remove($it->next());
+		}
+
+		$new_seealso = $_REQUEST[$this->getSlug().'_seealso'];
+		foreach ($new_seealso as $seealso)
+		{
+			if ($seealso != '')
+			{
+				$model->add(new Statement($personURI, new Resource($rdfs.'seeAlso'), new Resource($seealso)));
+			}
+		}
 
 		return true;
 	}
