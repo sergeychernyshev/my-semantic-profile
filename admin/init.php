@@ -61,10 +61,7 @@ if (array_key_exists('save', $_REQUEST))
 		$model->replace($existing_node, null, $existing_node, $personURI);
 	}
 
-	$docURI = new Resource("");
-	$model->add(new Statement($docURI, new Resource($rdf.'type'), new Resource($foaf.'PersonalProfileDocument')));
-	$model->add(new Statement($docURI, new Resource($foaf.'maker'), $personURI));
-	$model->add(new Statement($docURI, new Resource($foaf.'primaryTopic'), $personURI));
+	updateProfileData();
 
 	$success = saveModel() ? 'success' : 'failure';
 	header( 'Location: ./init.php?saved='.$success );

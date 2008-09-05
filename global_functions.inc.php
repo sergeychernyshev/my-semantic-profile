@@ -34,6 +34,8 @@ function xmlLang($lang)
 $foaf = 'http://xmlns.com/foaf/0.1/';
 $dc = 'http://purl.org/dc/elements/1.1/';
 $rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+$iana = 'http://www.iana.org/assignments/relation/';
+$awol = 'http://bblfish.net/work/atom-owl/2006-06-06/#';
 
 /**
  * Get the model object
@@ -42,7 +44,7 @@ $model = null; # using this for singleton operation
 
 function getModel()
 {
-	global $profileDocument, $profileDocumentType, $model, $foaf, $dc, $rdf;
+	global $profileDocument, $profileDocumentType, $model, $foaf, $dc, $rdf, $iana, $awol;
 
 	if ($model != null)
 	{
@@ -50,9 +52,11 @@ function getModel()
 	}
 
 	$model = ModelFactory::getDefaultModel();
+	$model->addNamespace('rdf', $rdf);
 	$model->addNamespace('foaf', $foaf);
 	$model->addNamespace('dc', $dc);
-	$model->addNamespace('rdf', $rdf);
+	$model->addNamespace('iana', $iana);
+	$model->addNamespace('awol', $awol);
 
 	if (filesize($profileDocument) > MAXFILESIZE)
 	{
@@ -82,6 +86,25 @@ function saveModel()
 	global $profileDocument, $model;
 
 	return $model->saveAs($profileDocument);
+}
+
+/**
+ * Update model with PersonalProfileDocument and other related triples based on configuration
+ */
+function updateProfileData()
+{
+	global $personURI, $baseURL, $model, $rdf, $foaf, $iana, $awol;
+
+	$docURI = new Resource("");
+	$model->addWithoutDuplicates(new Statement($docURI, new Resource($rdf.'type'), new Resource($foaf.'PersonalProfileDocument')));
+	$model->addWithoutDuplicates(new Statement($docURI, new Resource($foaf.'maker'), $personURI));
+	$model->addWithoutDuplicates(new Statement($docURI, new Resource($foaf.'primaryTopic'), $personURI));
+
+	$baseURI = new Resource($baseURL);
+	$model->addWithoutDuplicates(new Statement($docURI, new Resource($iana.'alternate'), $baseURI));
+	$model->addWithoutDuplicates(new Statement($baseURI, new Resource($awol.'type'), new Literal('text/html')));
+
+	return true;
 }
 
 /**
