@@ -52,7 +52,7 @@ function getModel()
 		return $model;
 	}
 
-	$model = ModelFactory::getDefaultModel();
+	$model = ModelFactory::getDefaultModel('');
 	$model->addNamespace('rdf', $rdf);
 	$model->addNamespace('rdfs', $rdfs);
 	$model->addNamespace('foaf', $foaf);
@@ -87,6 +87,8 @@ function saveModel()
 {
 	global $profileDocument, $model;
 
+	$model = dedupModel($model);
+
 	return $model->saveAs($profileDocument);
 }
 
@@ -107,6 +109,16 @@ function updateProfileData()
 	$model->addWithoutDuplicates(new Statement($baseURI, new Resource($awol.'type'), new Literal('text/html')));
 
 	return true;
+}
+
+/**
+ * Makes sure that model contains no duplicates
+ */
+function dedupModel($model)
+{
+	$emptymodel = new MemModel('');
+
+	return $emptymodel->unite($model);
 }
 
 /**
