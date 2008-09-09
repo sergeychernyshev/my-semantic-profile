@@ -99,6 +99,7 @@ header('Vary: Accept');
 </head>
 <body class="vcard" about="<?=$personURI->getURI()?>">
 <div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
+<div id="personuri">Person URI: <?=$personURI->getURI()?></div>
 <?
 $model_languages = getModelLanguages($model);
 
@@ -136,8 +137,11 @@ if (count($model_languages))
 }
 ?>
 <h1><span class="fn" property="foaf:name"<?=xmlLang(getLiteralLanguage($personName))?>><?=($personName ? $personName->getLabel() : 'Noname')?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
-<p><?=$otherNamesText?></p>
 <?
+if ($otherNamesText)
+{
+?><p><?=$otherNamesText?></p><?
+}
 
 /**
  * Let's get person's primary pictures (img) and show it's thumbnail if it exists or just resized it to 100 hight
