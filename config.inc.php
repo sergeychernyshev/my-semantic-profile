@@ -6,8 +6,6 @@
 // change this to the full URL of your installation
 $baseURL = 'http://www.yoursite.com/profile/';
 
-$defaultlang = 'en'; // this is used when literals don't define language specifically
-
 /**
  * location of Personal Profile Document
  */

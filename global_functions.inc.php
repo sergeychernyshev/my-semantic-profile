@@ -11,6 +11,7 @@ $build = $matches[1];
  * default value for this variable - can be overriden in config.inc.php
  */
 $profileDocumentType = 'rdf';
+$defaultlang = 'en'; // this is used when literals don't define language specifically
 
 /**
  * We're using RAP library for RDF parsing
