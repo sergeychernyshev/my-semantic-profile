@@ -88,6 +88,11 @@ header('Vary: Accept');
 #else
     header("Content-Type: text/html; charset=utf-8");
 
+require_once('URL2.php');
+$pageuri = new Net_URL2($_SERVER['SCRIPT_URI']);
+$profilefulluri = $pageuri->resolve($profileDocumentURI);
+$resolvedPersonURI = $profilefulluri->resolve($personURI->getURI())->getURL();
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 <head profile="http://www.w3.org/2006/03/hcard">
@@ -98,9 +103,9 @@ header('Vary: Accept');
 	<link type="text/css" rel="stylesheet" href="profile.css" />
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
-<body class="vcard" about="<?=$personURI->getURI()?>">
+<body class="vcard" about="<?=$resolvedPersonURI?>">
 <div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
-<div id="personuri">Person URI: <?=$personURI->getURI()?></div>
+<div id="personuri">Person URI: <?=$resolvedPersonURI?></div>
 <?
 $model_languages = getModelLanguages($model);
 
