@@ -308,42 +308,79 @@ $people = $model->sparqlQuery($query);
 
 if ($people)
 {
+	foreach ($people as $person)
+	{
+		$pURI = $person['?uri']->getURI();
+
+		$peopletodisplay[$pURI]['uri'] = $person['?uri'];
+		$peopletodisplay[$pURI]['names'] = array();
+		$peopletodisplay[$pURI]['homepages'] = array();
+	}
+
+	foreach ($people as $person)
+	{
+		$pURI = $person['?uri']->getURI();
+
+		if ($person['?name'])
+		{
+			$peopletodisplay[$pURI]['names'][getLiteralLanguage($person['?name'])]
+				= $person['?name']->getLabel();
+		}
+
+		if ($person['?homepage'])
+		{
+			$peopletodisplay[$pURI]['homepages'][] = $person['?homepage']->getURI();
+		}
+	}
+}
+
+if ($people && count($peopletodisplay))
+{
 ?>
 <h2>People</h2>
 <div id="people"><ul>
 <?
-	foreach ($people as $person)
+	foreach ($peopletodisplay as $uri => $person)
         {
-		if (is_a($person['?uri'], 'BlankNode') && !$person['?homepage'] && !$person['?name'])
+		if (is_a($person['uri'], 'BlankNode')
+			&& count($person['homepages']) == 0
+			&& count($person['names']) == 0
+			)
 		{
 			continue;
 		}
 
-		?><li rel="foaf:knows" resource="<?=$person['?uri']->getURI() ?>"><?
-		if ($person['?homepage'])
+		?><li rel="foaf:knows" resource="<?=$uri ?>">
+<?
+		if (count($person['homepages']) > 0)
 		{
-			?><span rel="foaf:homepage" resource="<?=$person['?homepage']->getURI() ?>"/><a rel="contact" href="<?=$person['?homepage']->getURI() ?>"><?
+			?><span rel="foaf:homepage" resource="<?=$person['homepages'][0] ?>"/><a rel="contact" href="<?=$person['homepages'][0] ?>"><?
 		}
 
-		if ($person['?name'])
+		if (array_key_exists($lang, $person['names']))
 		{
-			?><span property="foaf:name"<?=xmlLang($person['?name']->getLanguage()) ?> about="<?=$person['?uri']->getURI() ?>"><?=$person['?name']->getLabel() ?></span><?
+			?><span property="foaf:name"<?=xmlLang($lang) ?> about="<?=$uri ?>"><?=$person['names'][$lang] ?></span><?
+		}
+		elseif (array_key_exists($defaultlang, $person['names']))
+		{
+			?><span property="foaf:name"<?=xmlLang($defaultlang) ?> about="<?=$uri ?>"><?=$person['names'][$defaultlang] ?></span><?
 		}
 		else
 		{
-			?><span><?=$person['?uri']->getURI() ?></span><?
+			?><span><?=$uri ?></span><?
 		}
 
-		if ($person['?homepage'])
+		if (count($person['homepages']) > 0)
 		{
 			?></a><?
 		}
 
-		if (!is_a($person['?uri'], 'BlankNode'))
+		if (!is_a($person['uri'], 'BlankNode'))
 		{
-			?> <a href="<?=$person['?uri']->getURI() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?
+			?> <a href="<?=$uri ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?
 		}
-		?></li><?
+		?>
+</li><?
 	}
 ?></ul></div>
 <?
