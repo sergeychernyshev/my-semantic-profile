@@ -169,7 +169,7 @@ if ($images)
 <?
 	foreach ($images as $image)
 	{
-		?><span rel="foaf:img" resource="<?=$image['?image']->getURI() ?>"><a rel="gallery1" class="photo" href="<?=$image['?image']->getURI() ?>" title="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>"><img src="<?=($image['?thumbnail'] ? $image['?thumbnail']->getURI() : $image['?image']->getURI()) ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$image['?image']->getURI() ?>"/></a></span>
+		?><span rel="foaf:img" resource="<?=$profilefulluri->resolve($image['?image']->getURI())->getURL() ?>"><a rel="gallery1" class="photo" href="<?=$profilefulluri->resolve($image['?image']->getURI())->getURL() ?>" title="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>"><img src="<?=$profilefulluri->resolve($image['?thumbnail'] ? $image['?thumbnail']->getURI() : $image['?image']->getURI())->getURL() ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$profilefulluri->resolve($image['?image']->getURI())->getURL() ?>"/></a></span>
 <?
 	}
 ?></div><?
@@ -217,21 +217,19 @@ if ($homepages && count($homepagestodisplay))
 	{
 		if (array_key_exists($lang, $languages))
 		{
-			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepage ?>" property="dc:title" href="<?=$homepage ?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
+			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$profilefulluri->resolve($homepage)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
 	<?
 		}
 		elseif (array_key_exists($defaultlang, $languages))
 		{
-			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$homepage ?>" property="dc:title" href="<?=$homepage ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
+			?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$profilefulluri->resolve($homepage)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
 	<?
 		}
 		else	
 		{
-			?><li rel="foaf:homepage" href="<?=$homepage ?>"><a class="url" rel="me" href="<?=$homepage ?>"><?=$homepage ?></a></li>
+			?><li rel="foaf:homepage" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"><a class="url" rel="me" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"><?=$profilefulluri->resolve($homepage)->getURL() ?></a></li>
 	<?
 		}
-	
-		
 	}
 
 ?></ul></div>
@@ -277,17 +275,17 @@ if ($blogs && count($blogstodisplay))
 	{
 		if (array_key_exists($lang, $languages))
 		{
-			?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$blog ?>" property="dc:title" href="<?=$blog?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
+			?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$profilefulluri->resolve($blog)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($blog)->getURL()?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
 	<?
 		}
 		elseif (array_key_exists($defaultlang, $languages))
 		{
-			?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$blog ?>" property="dc:title" href="<?=$blog ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
+			?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$profilefulluri->resolve($blog)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($blog)->getURL() ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
 	<?
 		}
 		else	
 		{
-			?><li rel="foaf:weblog" href="<?=$blog ?>"><a class="url" rel="me" href="<?=$blog ?>"><?=$blog ?></a></li>
+			?><li rel="foaf:weblog" href="<?=$profilefulluri->resolve($blog)->getURL() ?>"><a class="url" rel="me" href="<?=$profilefulluri->resolve($blog)->getURL() ?>"><?=$profilefulluri->resolve($blog)->getURL() ?></a></li>
 	<?
 		}
 	
@@ -356,20 +354,20 @@ if ($people && count($peopletodisplay))
 			continue;
 		}
 
-		?><li rel="foaf:knows" resource="<?=$uri ?>">
+		?><li rel="foaf:knows" resource="<?=$profilefulluri->resolve($uri)->getURL() ?>">
 <?
 		if (count($person['homepages']) > 0)
 		{
-			?><span rel="foaf:homepage" resource="<?=$person['homepages'][0] ?>"/><a rel="contact" href="<?=$person['homepages'][0] ?>"><?
+			?><span rel="foaf:homepage" resource="<?=$profilefulluri->resolve($person['homepages'][0])->getURL() ?>"/><a rel="contact" href="<?=$profilefulluri->resolve($person['homepages'][0])->getURL() ?>"><?
 		}
 
 		if (array_key_exists($lang, $person['names']))
 		{
-			?><span property="foaf:name"<?=xmlLang($lang) ?> about="<?=$uri ?>"><?=$person['names'][$lang] ?></span><?
+			?><span property="foaf:name"<?=xmlLang($lang) ?> about="<?=$profilefulluri->resolve($uri)->getURL() ?>"><?=$person['names'][$lang] ?></span><?
 		}
 		elseif (array_key_exists($defaultlang, $person['names']))
 		{
-			?><span property="foaf:name"<?=xmlLang($defaultlang) ?> about="<?=$uri ?>"><?=$person['names'][$defaultlang] ?></span><?
+			?><span property="foaf:name"<?=xmlLang($defaultlang) ?> about="<?=$profilefulluri->resolve($uri)->getURL() ?>"><?=$person['names'][$defaultlang] ?></span><?
 		}
 		else
 		{
@@ -383,7 +381,7 @@ if ($people && count($peopletodisplay))
 
 		if (!is_a($person['uri'], 'BlankNode'))
 		{
-			?> <a href="<?=$uri ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?
+			?> <a href="<?=$profilefulluri->resolve($uri)->getURL() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?
 		}
 		?>
 </li><?
