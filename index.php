@@ -5,10 +5,6 @@
  */
 
 $SPROOT = './';
-/**
- * Configuration parameters
- */
-include_once('config.inc.php');
 
 /**
  * Uncomment to enable debugging functionality
@@ -16,6 +12,11 @@ include_once('config.inc.php');
 #include_once('debug.php');
 
 include_once('global_functions.inc.php');
+
+/**
+ * Configuration parameters
+ */
+include_once('config.inc.php');
 
 $model = getModel();
 $personURI = getPrimaryPerson($model);

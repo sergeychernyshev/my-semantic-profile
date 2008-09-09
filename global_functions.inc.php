@@ -7,6 +7,11 @@ $version = '0.3.1';
 preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
 
+/*
+ * default value for this variable - can be overriden in config.inc.php
+ */
+$profileDocumentType = 'rdf';
+
 /**
  * We're using RAP library for RDF parsing
  */
