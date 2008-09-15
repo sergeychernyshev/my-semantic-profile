@@ -48,8 +48,10 @@ class BasicInfoModule extends EditModule
 			}
 		}
 ?>
+		<div class="new_entries_name">
 		<div>
 		<input type="text" name="<?=$this->getSlug()?>_name[]" value=""/>
+		</div>
 		</div>
 		</div>
 
@@ -64,8 +66,10 @@ class BasicInfoModule extends EditModule
 			?><div><input type="text" name="<?=$this->getSlug()?>_openid[]" value="<?=htmlspecialchars($openid->getURI())?>" size="60"/></div><?
 		}
 ?>
+		<div class="new_entries_openid">
 		<div>
 		<input type="text" name="<?=$this->getSlug()?>_openid[]" value="" size="60"/>
+		</div>
 		</div>
 		</div>
 
@@ -112,9 +116,11 @@ class BasicInfoModule extends EditModule
 			}
 		}
 ?>
+		<div class="new_entries_homepages">
 		<div>
 		Title: <input type="text" name="<?=$this->getSlug()?>_homepageTitle[]" value="" size="40"/>
 		URL: <input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="" size="60"/>
+		</div>
 		</div>
 
 		</div>
@@ -159,11 +165,13 @@ class BasicInfoModule extends EditModule
 			}
 		}
 ?>
+		<div class="new_entries_blogs">
 		<div>
 		Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="" size="40"/>
 		URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="" size="60"/>
 		</div>
 
+		</div>
 		</div>
 		</div>
 
@@ -179,8 +187,10 @@ class BasicInfoModule extends EditModule
 			?><div><input type="text" name="<?=$this->getSlug()?>_seealso[]" value="<?=htmlspecialchars($seealso->getURI())?>" size="60"/></div><?
 		}
 ?>
+		<div class="new_entries_seealso">
 		<div>
 		<input type="text" name="<?=$this->getSlug()?>_seealso[]" value="" size="60"/>
+		</div>
 		</div>
 		</div>
 <?

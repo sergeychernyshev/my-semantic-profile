@@ -79,7 +79,7 @@ if (array_key_exists('save', $_REQUEST))
 	<link type="text/css" rel="stylesheet" href="admin.css" />
 	<script type="text/javascript" src="admin.js"></script>
 </head>
-<body>
+<body onload="initNewEntries()">
 <form action="./" method="POST">
 <div id="navigation">
 <input name="module" type="hidden" value="<?=urlencode($module->getSlug())?>">

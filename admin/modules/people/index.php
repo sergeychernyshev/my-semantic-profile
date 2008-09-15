@@ -104,9 +104,12 @@ class PeopleModule extends EditModule
 			}
 		}
 ?>
-			<div><input type="hidden" name="<?=$this->getSlug()?>_personNodeID[]" value=""/>
+		<div class="new_entries_person">
+		<div>
+			<input type="hidden" name="<?=$this->getSlug()?>_personNodeID[]" value=""/>
 			<input type="hidden" name="<?=$this->getSlug()?>_personURI[]" value=""/>
 			URI: <input type="text" name="<?=$this->getSlug()?>_personNewURI[]" size="50"/>
+		</div>
 		</div>
 
 		</div>
