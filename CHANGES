@@ -1,0 +1,33 @@
+Version 0.4                                                   September 15, 2008
+--------------------------------------------------------------------------------
+*) Added GPL LICENSE file
+
+*) Added JavaScript to add more subforms for adding new entries
+   so users don't need to add one by one
+
+*) Resolving all URIs against profile RDF URI (fixes broken RDFa URIs)
+
+*) Added namespace declarations to the model
+
+*) Moved editing modules into separate files
+
+*) Added raw triple editing (RDF/XML only for now)
+
+*) Added OpenID support
+
+*) Added better handling for empty SPARQL queries
+
+*) Added support for non-default personURI
+
+*) Improved editing interface with better styles and icons
+
+*) Added editing module for people (foaf:knows)
+
+*) Added editing of other people's info (personURI URL parameter)
+
+*) Created meaningful default configuration and foaf.rdf to simplify installation
+   (thanks for Dmitry Roaslyakov for being a brave guinea pig)
+
+*) Added rdfs:seeAlso support for additional data about the person
+
+*) Fixed a bug with multilingual entries for people
