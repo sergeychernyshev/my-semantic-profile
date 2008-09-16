@@ -15,7 +15,7 @@ $profileDocumentURI = $baseURL.'foaf.rdf';
 /**
  * Uncomment for test cases
  */
-$profileDocument = $SPROOT.'/tests/timbl.rdf';
-$profileDocumentURI = $baseURL.'tests/timbl.rdf';
+#$profileDocument = $SPROOT.'/tests/timbl.rdf';
+#$profileDocumentURI = $baseURL.'tests/timbl.rdf';
 
 $googleMapsKey = '-- insert Google Maps API key here --';
