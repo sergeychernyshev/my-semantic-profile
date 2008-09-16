@@ -122,7 +122,15 @@ function updateProfileData()
  */
 function dedupModel($model)
 {
+	global $foaf, $dc, $rdf, $rdfs, $iana, $awol;
+
 	$emptymodel = new MemModel('');
+	$emptymodel->addNamespace('rdf', $rdf);
+	$emptymodel->addNamespace('rdfs', $rdfs);
+	$emptymodel->addNamespace('foaf', $foaf);
+	$emptymodel->addNamespace('dc', $dc);
+	$emptymodel->addNamespace('iana', $iana);
+	$emptymodel->addNamespace('awol', $awol);
 
 	return $emptymodel->unite($model);
 }
