@@ -1,0 +1,11 @@
+To configure this software, follow these steps:
+- edit configuration params in config.inc.php
+- make foaf.rdf writable by the web server user
+- update admin/.htaccess with correct authentication parameters
+
+If installing from source repository, you'll also need to:
+- apply patches to 3rd party libraries by running the following command:
+ 
+    patch -p0 <patches/*.patch
+
+  make sure patched files have the right permissions for your web server to use them
