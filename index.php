@@ -124,7 +124,7 @@ if (count($model_languages))
 	}
 	else
 	{
-		?><a rel="rdfs:seeAlso" href="./"><?=$defaultlang?></a><?
+		?><a rel="alternate" href="./" hreflang="<?=$defaultlang?>"><?=$defaultlang?></a><?
 	}
 
 	foreach (array_keys($model_languages) as $l)
@@ -135,7 +135,7 @@ if (count($model_languages))
 		}
 		else
 		{
-			?> - <a rel="rdfs:seeAlso" href="?lang=<?=urlencode($l)?>"><?=$l?></a><?
+			?> - <a rel="alternate" hreflang="<?=$l?>" href="?lang=<?=urlencode($l)?>"><?=$l?></a><?
 		}
 	}
 	?></div>
