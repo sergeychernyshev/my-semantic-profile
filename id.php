@@ -2,6 +2,7 @@
 /**
  * This script uses 303 redirects to resolve resource IDs
  */
+$SPROOT = './';
 
 /**
  * Configuration parameters
