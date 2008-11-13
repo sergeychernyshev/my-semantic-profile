@@ -103,9 +103,9 @@ $resolvedPersonURI = $profilefulluri->resolve($personURI->getURI())->getURL();
 	<link type="text/css" rel="stylesheet" href="profile.css" />
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
-<body class="vcard" about="<?=$resolvedPersonURI?>">
+<body about="">
 <div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
-<div id="personuri">Person URI: <?=$resolvedPersonURI?></div>
+<div id="personuri">Person URI: <span href="<?=$resolvedPersonURI?>" rel="foaf:primaryTopic" rev="foaf:isPrimaryTopicOf"><?=$resolvedPersonURI?></span></div>
 <?
 $model_languages = getModelLanguages($model);
 
@@ -142,6 +142,8 @@ if (count($model_languages))
 <?
 }
 ?>
+<div class="vcard" about="<?=$resolvedPersonURI?>">
+<span rev="foaf:maker" rel="foaf:made" href=""/>
 <h1><span class="fn" property="foaf:name"<?=xmlLang(getLiteralLanguage($personName))?>><?=($personName ? $personName->getLabel() : 'Noname')?></span> <a rel="rdfs:seeAlso" href="<?=$profileDocumentURI ?>" title="My FOAF document"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a></h1>
 <?
 if ($otherNamesText)
@@ -430,6 +432,7 @@ if ($locations)
 }
 
 ?>
+</div>
 <div style="border-top: 1px solid silver; padding: 5px; align: center; margin-top: 20px">
 <a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Check XHTML + RDFa validity"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Extract RDF from RDFa on this page"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Extract RDF from RDFa on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
