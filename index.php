@@ -104,8 +104,13 @@ $resolvedPersonURI = $profilefulluri->resolve($personURI->getURI())->getURL();
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body about="">
-<div style="float:right"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
-<div id="personuri">Person URI: <span href="<?=$resolvedPersonURI?>" rel="foaf:primaryTopic" rev="foaf:isPrimaryTopicOf"><?=$resolvedPersonURI?></span></div>
+<div id="adminbutton"><a href="admin/"><img src="admin.png" alt="Click here to edit this profile" style="border: 0px"/></a></div>
+
+<div id="qranduri">
+Person URI:<br/>
+<img src="http://chart.apis.google.com/chart?chs=200x200&amp;cht=qr&amp;chl=<?=urlencode($resolvedPersonURI)?>&amp;choe=UTF-8" title="Person URI: <?=$resolvedPersonURI?>" alt="QR code for <?=$resolvedPersonURI?>"/><br/>
+<span style="font-weight: bold" href="<?=$resolvedPersonURI?>" rel="foaf:primaryTopic" rev="foaf:isPrimaryTopicOf"><?=$resolvedPersonURI?></span>
+</div>
 <?
 $model_languages = getModelLanguages($model);
 
@@ -434,8 +439,8 @@ if ($locations)
 ?>
 </div>
 <div style="border-top: 1px solid silver; padding: 5px; align: center; margin-top: 20px">
-<a href="http://validator.w3.org/check?uri=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Check XHTML + RDFa validity"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
-<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Extract RDF from RDFa on this page"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Extract RDF from RDFa on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://validator.w3.org/check/referrer" title="Check XHTML + RDFa validity"><img src="http://www.w3.org/Icons/valid-xhtml-rdfa-blue" alt="Valid XHTML + RDFa" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
+<a href="http://www.w3.org/2007/08/pyRdfa/extract?uri=referer" title="Extract RDF from RDFa on this page"><img src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-orange.png" alt="Extract RDF from RDFa on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://hcard.geekhood.net/?url=<?=urlencode($_SERVER['SCRIPT_URI'].'?'.$_SERVER['QUERY_STRING'])?>" title="Show hCard information on this page"><img src="hcard.png" alt="Show hCard information on this page" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://gmpg.org/xfn/" title="XFN Homepage"><img src="xfn-btn.gif" alt="XFN" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
 <a href="http://microformats.org/wiki/geo" title="Geo Microformat Page"><img src="geo.png" alt="geo" style="margin: 0px 5px 0px 5px; border: 0px"/></a>
