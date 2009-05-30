@@ -51,7 +51,7 @@ foreach ($modules as $mod)
 
 $lang = $defaultlang;
 
-if (array_key_exists('lang', $_REQUEST))
+if (array_key_exists('lang', $_REQUEST) && preg_match('/^\w+(-\w+)?$/', $_REQUEST['lang']) == 1)
 {
 	$lang = $_REQUEST['lang'];
 }
@@ -158,7 +158,7 @@ foreach ($languageSequence as $language)
 <div id="title"><?=$module->getName()?></div><?
 if (!$defaultPerson)
 {
-	?><div class="personURI">Editing <b><?=htmlspecialchars($personURI->getURI())?></b> (<a href="./">go back</a>)</div>
+	?><div class="personURI">Editing <b><?=htmlspecialchars($personURI->getURI())?></b> (<a href="./?lang=<?=$lang?>">go back</a>)</div>
 	<input type="hidden" name="personURI" value="<?=htmlspecialchars($personURI->getURI())?>">
 	<?
 }

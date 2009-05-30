@@ -94,7 +94,7 @@ class PeopleModule extends EditModule
 				if (!is_a($person['resource'], 'BlankNode'))
 				{
 				?>
-				(<a href="?personURI=<?=urlencode($person['resource']->getURI())?>" title="Will work in the future">edit</a>)
+				(<a href="?lang=<?=$language?>&personURI=<?=urlencode($person['resource']->getURI())?>" title="Will work in the future">edit</a>)
 				<?
 				}
 
