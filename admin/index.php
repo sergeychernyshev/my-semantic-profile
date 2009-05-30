@@ -158,7 +158,7 @@ foreach ($languageSequence as $language)
 <div id="title"><?=$module->getName()?></div><?
 if (!$defaultPerson)
 {
-	?><div class="personURI">Editing <b><?=htmlspecialchars($personURI->getURI())?></b> (<a href="./?lang=<?=$lang?>">go back</a>)</div>
+	?><div id="personURI">Editing <b><?=htmlspecialchars($personURI->getURI())?></b> (<a href="./?module=people&lang=<?=$lang?>">go back</a>)</div>
 	<input type="hidden" name="personURI" value="<?=htmlspecialchars($personURI->getURI())?>">
 	<?
 }

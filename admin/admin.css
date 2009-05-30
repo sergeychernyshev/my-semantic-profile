@@ -96,3 +96,15 @@ form {
 #messageicon {
 	vertical-align: middle;
 }
+
+#personURI {
+	background: #6D7D9F;
+	font-size: x-large;
+	color: #FFFF88;
+	border: 1px solid #3F4C6B;
+	padding: 10px;
+}
+
+#personURI a {
+	color: white;
+}
