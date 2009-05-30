@@ -69,6 +69,7 @@ if (array_key_exists('save', $_REQUEST))
 	exit;
 }
 
+header('Content-type: text/html; charset=utf-8');
 
 /**
  * Displaying tabs with module names linking to modules
