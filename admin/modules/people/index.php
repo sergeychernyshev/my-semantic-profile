@@ -24,7 +24,6 @@ class PeopleModule extends EditModule
 		 * to the whole app as parameter instead of using default profile URI
 		 */
 ?>
-		<h2>People</h2>
 		<div id="<?=$this->getSlug()?>_people">
 <?
 		$query = 'PREFIX foaf: <'.$foaf.'>
