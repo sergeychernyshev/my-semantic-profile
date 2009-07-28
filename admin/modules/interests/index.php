@@ -16,7 +16,6 @@ class InterestsModule extends EditModule
 		global $foaf, $dc, $rdfs;
 
 		?>
-		<h2>Interests</h2>
 		<div id="<?=$this->getSlug()?>">
 <?
 		$query = '
