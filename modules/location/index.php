@@ -11,7 +11,7 @@ class LocationDisplayModule extends DisplayModule
 		return "location";
 	}
 
-	function displayContent($model, $personURI, $language)
+	function displayContent($model, $personURI, $lang)
 	{
 		global $googleMapsKey, $foaf, $dc, $rdfs;
 

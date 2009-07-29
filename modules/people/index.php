@@ -11,7 +11,7 @@ class PeopleDisplayModule extends DisplayModule
 		return "people";
 	}
 
-	function displayContent($model, $personURI, $language)
+	function displayContent($model, $personURI, $lang)
 	{
 		global $profilefulluri, $defaultlang, $foaf, $dc, $rdfs;
 

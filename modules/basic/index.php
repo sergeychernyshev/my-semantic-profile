@@ -11,7 +11,7 @@ class BasicInfoDisplayModule extends DisplayModule
 		return "basic";
 	}
 
-	function displayContent($model, $personURI, $language)
+	function displayContent($model, $personURI, $lang)
 	{
 		global $profilefulluri, $defaultlang, $foaf, $dc, $rdfs;
 		/**
