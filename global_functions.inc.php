@@ -2,7 +2,7 @@
 /**
  * Automated version generator
  */
-$version = '0.4.2';
+$version = '0.4.3';
 
 preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
@@ -43,6 +43,7 @@ $rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 $rdfs = 'http://www.w3.org/2000/01/rdf-schema#';
 $iana = 'http://www.iana.org/assignments/relation/';
 $awol = 'http://bblfish.net/work/atom-owl/2006-06-06/#';
+$geo = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
 
 /**
  * Get the model object
