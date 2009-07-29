@@ -55,7 +55,7 @@ class BasicInfoModule extends EditModule
 		</div>
 		</div>
 
-		<h2>OpedID</h2>
+		<h2>OpenID</h2>
 		<div id="<?=$this->getSlug()?>_openid">
 <?
 		$it = $model->findAsIterator($personURI, new Resource($foaf.'openid'), NULL);
