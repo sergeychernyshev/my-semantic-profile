@@ -2,7 +2,7 @@
 /**
  * Automated version generator
  */
-$version = '0.4.1';
+$version = '0.4.2';
 
 preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
 $build = $matches[1];
