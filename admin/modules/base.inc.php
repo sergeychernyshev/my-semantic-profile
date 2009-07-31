@@ -23,6 +23,6 @@ include_once('basic/index.php');
 #include_once('pictures/index.php');
 include_once('people/index.php');
 include_once('location/index.php');
-include_once('triples/index.php');
 include_once('accounts/index.php');
 include_once('interests/index.php');
+include_once('triples/index.php');
