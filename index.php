@@ -24,10 +24,11 @@ $personURI = getPrimaryPerson($model);
 if ($personURI == null)
 {
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://www.w3.org/2006/03/hcard">
 	<title>Can't find person</title>
 	<link type="text/css" rel="stylesheet" href="profile.css" />
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" /> 
 	<script type="text/javascript" src="floatbox/floatbox.js"></script>
 </head>
 <body>
@@ -98,6 +99,7 @@ $resolvedPersonURI = $profilefulluri->resolve($personURI->getURI())->getURL();
 <head profile="http://www.w3.org/2006/03/hcard">
 	<title><?=($personName ? $personName->getLabel() : 'Noname')?></title>
 	<link rel="meta" type="application/rdf+xml" title="FOAF" href="<?=$profileDocumentURI ?>" />
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" /> 
 	<link rel="alternate" type="application/rdf+xml" title="<?=$title ?> (RDF)" href="<?=$profileDocumentURI ?>" />
 	<link type="text/css" rel="stylesheet" href="floatbox/floatbox.css" />
 	<link type="text/css" rel="stylesheet" href="profile.css" />
