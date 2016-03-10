@@ -1,4 +1,4 @@
-<?
+<?php
 class AccountsModule extends EditModule
 {
 	function getName()
@@ -16,8 +16,8 @@ class AccountsModule extends EditModule
 		global $foaf, $dc, $rdfs;
 
 		?>
-		<div id="<?=$this->getSlug()?>">
-<?
+		<div id="<?php echo $this->getSlug()?>">
+<?php
 		$query = '
 		PREFIX foaf: <'.$foaf.'>
 		PREFIX dc: <'.$dc.'>
@@ -61,26 +61,26 @@ class AccountsModule extends EditModule
 			{
 ?>
 				<div><table style="border: 1px solid #3F4C6B; padding: 5px; margin-bottom: 10px">
-				<tr><td>Account title:</td><td><input type="text" name="<?=$this->getSlug()?>_accountTitle[]" value="<?=htmlspecialchars($account['accounttitle'])?>" size="60"/></td></tr>
-				<tr><td>Service Homepage URL:</td><td><input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="<?=htmlspecialchars($account['servicehomepage'])?>" size="60"/></td></tr>
-				<tr><td>Account name:</td><td><input type="text" name="<?=$this->getSlug()?>_accountName[]" value="<?=htmlspecialchars($account['accountname'])?>" size="40"/></td></tr>
-				<tr><td>Profile URL:</td><td><input type="text" name="<?=$this->getSlug()?>_profileURL[]" value="<?=htmlspecialchars($account['profilehomepage'])?>" size="60"/></td></tr>
+				<tr><td>Account title:</td><td><input type="text" name="<?php echo $this->getSlug()?>_accountTitle[]" value="<?php echo htmlspecialchars($account['accounttitle'])?>" size="60"/></td></tr>
+				<tr><td>Service Homepage URL:</td><td><input type="text" name="<?php echo $this->getSlug()?>_homepageURL[]" value="<?php echo htmlspecialchars($account['servicehomepage'])?>" size="60"/></td></tr>
+				<tr><td>Account name:</td><td><input type="text" name="<?php echo $this->getSlug()?>_accountName[]" value="<?php echo htmlspecialchars($account['accountname'])?>" size="40"/></td></tr>
+				<tr><td>Profile URL:</td><td><input type="text" name="<?php echo $this->getSlug()?>_profileURL[]" value="<?php echo htmlspecialchars($account['profilehomepage'])?>" size="60"/></td></tr>
 				</table></div>
-<?
+<?php
 			}
 		}
 ?>
 		<div class="new_entries_accounts">
 		<div><table style="border: 1px solid #3F4C6B; padding: 5px;">
-		<tr><td>Account title:</td><td><input type="text" name="<?=$this->getSlug()?>_accountTitle[]" value="" size="60"/></td></tr>
-		<tr><td>Service Homepage URL:</td><td><input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="" size="60"/></td></tr>
-		<tr><td>Account name:</td><td><input type="text" name="<?=$this->getSlug()?>_accountName[]" value="" size="40"/></td></tr>
-		<tr><td>Profile URL:</td><td><input type="text" name="<?=$this->getSlug()?>_profileURL[]" value="" size="60"/></td></tr>
+		<tr><td>Account title:</td><td><input type="text" name="<?php echo $this->getSlug()?>_accountTitle[]" value="" size="60"/></td></tr>
+		<tr><td>Service Homepage URL:</td><td><input type="text" name="<?php echo $this->getSlug()?>_homepageURL[]" value="" size="60"/></td></tr>
+		<tr><td>Account name:</td><td><input type="text" name="<?php echo $this->getSlug()?>_accountName[]" value="" size="40"/></td></tr>
+		<tr><td>Profile URL:</td><td><input type="text" name="<?php echo $this->getSlug()?>_profileURL[]" value="" size="60"/></td></tr>
 		</table></div>
 		</div>
 
 		</div>
-<?
+<?php
 	}
 
 	function saveChanges($model, &$personURI, $language)

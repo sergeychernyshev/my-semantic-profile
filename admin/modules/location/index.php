@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GeoLocationModule extends EditModule
 {
@@ -16,8 +16,8 @@ class GeoLocationModule extends EditModule
 	{
 		global $foaf, $geo;
 		?>
-		<div id="<?=$this->getSlug()?>">
-<?
+		<div id="<?php echo $this->getSlug()?>">
+<?php
 		$query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 		PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 		select ?lat, ?lng
@@ -42,22 +42,22 @@ class GeoLocationModule extends EditModule
 			{
 ?>
 				<div>
-				Lattitude: <input type="text" name="<?=$this->getSlug()?>_lat[]" value="<?=htmlspecialchars($location['lat'])?>" size="60"/>
-				Longitude: <input type="text" name="<?=$this->getSlug()?>_lng[]" value="<?=htmlspecialchars($location['lng'])?>" size="60"/>
+				Lattitude: <input type="text" name="<?php echo $this->getSlug()?>_lat[]" value="<?php echo htmlspecialchars($location['lat'])?>" size="60"/>
+				Longitude: <input type="text" name="<?php echo $this->getSlug()?>_lng[]" value="<?php echo htmlspecialchars($location['lng'])?>" size="60"/>
 				</div>
-<?
+<?php
 			}
 		}
 ?>
 		<div class="new_entries_locations">
 		<div>
-		Lattitude: <input type="text" name="<?=$this->getSlug()?>_lat[]" value="" size="60"/>
-		Longitude: <input type="text" name="<?=$this->getSlug()?>_lng[]" value="" size="60"/>
+		Lattitude: <input type="text" name="<?php echo $this->getSlug()?>_lat[]" value="" size="60"/>
+		Longitude: <input type="text" name="<?php echo $this->getSlug()?>_lng[]" value="" size="60"/>
 		</div>
 		</div>
 
 		</div>
-<?
+<?php
 	}
 
 	function saveChanges($model, &$personURI, $language)

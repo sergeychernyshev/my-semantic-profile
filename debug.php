@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * This file contains various debugging tools and variables
  */

@@ -1,4 +1,4 @@
-<?
+<?php
 class PeopleDisplayModule extends DisplayModule
 {
 	function getName()
@@ -62,7 +62,7 @@ class PeopleDisplayModule extends DisplayModule
 		?>
 		<h2>People</h2>
 		<div id="people"><ul>
-		<?
+		<?php
 			foreach ($peopletodisplay as $uri => $person)
 			{
 				if (is_a($person['uri'], 'BlankNode')
@@ -73,40 +73,40 @@ class PeopleDisplayModule extends DisplayModule
 					continue;
 				}
 
-				?><li rel="foaf:knows" resource="<?=$profilefulluri->resolve($uri)->getURL() ?>">
-		<?
+				?><li rel="foaf:knows" resource="<?php echo $profilefulluri->resolve($uri)->getURL() ?>">
+		<?php
 				if (count($person['homepages']) > 0)
 				{
-					?><span rel="foaf:homepage" resource="<?=$profilefulluri->resolve($person['homepages'][0])->getURL() ?>"/><a rel="contact" href="<?=$profilefulluri->resolve($person['homepages'][0])->getURL() ?>"><?
+					?><span rel="foaf:homepage" resource="<?php echo $profilefulluri->resolve($person['homepages'][0])->getURL() ?>"/><a rel="contact" href="<?php echo $profilefulluri->resolve($person['homepages'][0])->getURL() ?>"><?php
 				}
 
 				if (array_key_exists($lang, $person['names']))
 				{
-					?><span property="foaf:name"<?=xmlLang($lang) ?> about="<?=$profilefulluri->resolve($uri)->getURL() ?>"><?=$person['names'][$lang] ?></span><?
+					?><span property="foaf:name"<?php echo xmlLang($lang) ?> about="<?php echo $profilefulluri->resolve($uri)->getURL() ?>"><?php echo $person['names'][$lang] ?></span><?php
 				}
 				elseif (array_key_exists($defaultlang, $person['names']))
 				{
-					?><span property="foaf:name"<?=xmlLang($defaultlang) ?> about="<?=$profilefulluri->resolve($uri)->getURL() ?>"><?=$person['names'][$defaultlang] ?></span><?
+					?><span property="foaf:name"<?php echo xmlLang($defaultlang) ?> about="<?php echo $profilefulluri->resolve($uri)->getURL() ?>"><?php echo $person['names'][$defaultlang] ?></span><?php
 				}
 				else
 				{
-					?><span><?=$uri ?></span><?
+					?><span><?php echo $uri ?></span><?php
 				}
 
 				if (count($person['homepages']) > 0)
 				{
-					?></a><?
+					?></a><?php
 				}
 
 				if (!is_a($person['uri'], 'BlankNode'))
 				{
-					?> <a href="<?=$profilefulluri->resolve($uri)->getURL() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?
+					?> <a href="<?php echo $profilefulluri->resolve($uri)->getURL() ?>" title="FOAF"><img src="foaf.png" alt="FOAF" style="border: 0px"/></a><?php
 				}
 				?>
-		</li><?
+		</li><?php
 			}
 		?></ul></div>
-		<?
+		<?php
 		}
 		return true;
 	}

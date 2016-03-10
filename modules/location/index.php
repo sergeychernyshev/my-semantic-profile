@@ -1,4 +1,4 @@
-<?
+<?php
 class LocationDisplayModule extends DisplayModule
 {
 	function getName()
@@ -29,28 +29,28 @@ class LocationDisplayModule extends DisplayModule
 		{
 		?><h2>Location</h2>
 		<div id="location">
-		<?
+		<?php
 			$first=true;
 			foreach ($locations as $location)
 			{
 				$markers[] = $location['?lat']->getLabel().','.$location['?lng']->getLabel();
 				?>
-				<span rel="foaf:based_near"><span typeof="geo:Point"<? if ($first) {?> class="geo"<? } ?>>
-				<span property="geo:lat"<? if ($first) {?> class="latitude"<? } ?> style="display:none"><?=$location['?lat']->getLabel()?></span>
-				<span property="geo:long"<? if ($first) {?> class="longitude"<? } ?> style="display:none"><?=$location['?lng']->getLabel()?></span>
-				</span></span><?
+				<span rel="foaf:based_near"><span typeof="geo:Point"<?php if ($first) {?> class="geo"<?php } ?>>
+				<span property="geo:lat"<?php if ($first) {?> class="latitude"<?php } ?> style="display:none"><?php echo $location['?lat']->getLabel()?></span>
+				<span property="geo:long"<?php if ($first) {?> class="longitude"<?php } ?> style="display:none"><?php echo $location['?lng']->getLabel()?></span>
+				</span></span><?php
 				$first = false;
 			}
 
 		?>
-		<div id="map" style="width: 600px; height: 400px"><img src="http://maps.google.com/staticmap?<?
+		<div id="map" style="width: 600px; height: 400px"><img src="https://maps.googleapis.com/maps/api/staticmap?<?php
 			if (count($locations) < 2)
 			{
 				echo 'zoom=12&amp;';
 			}
-		?>size=600x400&amp;markers=<?=implode('|', $markers); ?>%7C&amp;maptype=roadmap&amp;key=<?=$googleMapsKey?>" alt="locations map" width="600" height="400"/></div>
+		?>size=600x400&amp;markers=<?php echo implode('|', $markers); ?>%7C&amp;maptype=roadmap&amp;key=<?php echo $googleMapsKey?>" alt="locations map" width="600" height="400"/></div>
 		</div>
-		<?
+		<?php
 		}
 
 		return true;

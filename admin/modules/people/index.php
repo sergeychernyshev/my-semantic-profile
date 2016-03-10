@@ -1,4 +1,4 @@
-<?
+<?php
 class PeopleModule extends EditModule
 {
 	function getName()
@@ -24,8 +24,8 @@ class PeopleModule extends EditModule
 		 * to the whole app as parameter instead of using default profile URI
 		 */
 ?>
-		<div id="<?=$this->getSlug()?>_people">
-<?
+		<div id="<?php echo $this->getSlug()?>_people">
+<?php
 		$query = 'PREFIX foaf: <'.$foaf.'>
 		select ?name, ?homepage, ?uri
 		where {
@@ -61,13 +61,13 @@ class PeopleModule extends EditModule
 			{
 ?>
 				<div>
-				<input type="hidden" name="<?=$this->getSlug()?>_personNodeID[]" value="<? if (is_a($person['resource'], 'BlankNode')) { echo htmlspecialchars($uri); }?>"/>
-				<input type="hidden" name="<?=$this->getSlug()?>_personURI[]" value="<? if (!is_a($person['resource'], 'BlankNode')) { echo htmlspecialchars($uri); }?>"/>
-				URI: <input type="text" name="<?=$this->getSlug()?>_personNewURI[]" value="<? if (!is_a($person['resource'], 'BlankNode')) { echo htmlspecialchars($uri); }?>" size="50"/>
-	<?
+				<input type="hidden" name="<?php echo $this->getSlug()?>_personNodeID[]" value="<?php if (is_a($person['resource'], 'BlankNode')) { echo htmlspecialchars($uri); }?>"/>
+				<input type="hidden" name="<?php echo $this->getSlug()?>_personURI[]" value="<?php if (!is_a($person['resource'], 'BlankNode')) { echo htmlspecialchars($uri); }?>"/>
+				URI: <input type="text" name="<?php echo $this->getSlug()?>_personNewURI[]" value="<?php if (!is_a($person['resource'], 'BlankNode')) { echo htmlspecialchars($uri); }?>" size="50"/>
+	<?php
 				if (array_key_exists('homepage', $person))
 				{
-					?><a href="<?=htmlspecialchars($person['homepage'])?>"><?
+					?><a href="<?php echo htmlspecialchars($person['homepage'])?>"><?php
 				}
 
 				if (array_key_exists('name', $person))
@@ -76,43 +76,43 @@ class PeopleModule extends EditModule
 				}
 				else
 				{
-					?><i>Unnamed<?
+					?><i>Unnamed<?php
 
 					if (is_a($person['resource'], 'BlankNode'))
 					{
-						?> (<?=htmlspecialchars($uri)?>)<?
+						?> (<?php echo htmlspecialchars($uri)?>)<?php
 					}
-					?></i><?
+					?></i><?php
 				}
 
 				if (array_key_exists('homepage', $person))
 				{
-					?></a><?
+					?></a><?php
 				}
 
 				if (!is_a($person['resource'], 'BlankNode'))
 				{
 				?>
-				(<a href="?lang=<?=$language?>&personURI=<?=urlencode($person['resource']->getURI())?>" title="Will work in the future">edit</a>)
-				<?
+				(<a href="?lang=<?php echo $language?>&personURI=<?php echo urlencode($person['resource']->getURI())?>" title="Will work in the future">edit</a>)
+				<?php
 				}
 
 				?>
 				</div>
-<?
+<?php
 			}
 		}
 ?>
 		<div class="new_entries_person">
 		<div>
-			<input type="hidden" name="<?=$this->getSlug()?>_personNodeID[]" value=""/>
-			<input type="hidden" name="<?=$this->getSlug()?>_personURI[]" value=""/>
-			URI: <input type="text" name="<?=$this->getSlug()?>_personNewURI[]" size="50"/>
+			<input type="hidden" name="<?php echo $this->getSlug()?>_personNodeID[]" value=""/>
+			<input type="hidden" name="<?php echo $this->getSlug()?>_personURI[]" value=""/>
+			URI: <input type="text" name="<?php echo $this->getSlug()?>_personNewURI[]" size="50"/>
 		</div>
 		</div>
 
 		</div>
-<?
+<?php
 	}
 
 	function saveChanges($model, $personURI, $language)

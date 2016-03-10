@@ -1,4 +1,4 @@
-<?
+<?php
 class InterestsModule extends EditModule
 {
 	function getName()
@@ -16,8 +16,8 @@ class InterestsModule extends EditModule
 		global $foaf, $dc, $rdfs;
 
 		?>
-		<div id="<?=$this->getSlug()?>">
-<?
+		<div id="<?php echo $this->getSlug()?>">
+<?php
 		$query = '
 		PREFIX foaf: <'.$foaf.'>
 		PREFIX dc: <'.$dc.'>
@@ -49,22 +49,22 @@ class InterestsModule extends EditModule
 			{
 ?>
 				<div>
-				Title: <input type="text" name="<?=$this->getSlug()?>_interestTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
-				Page URL: <input type="text" name="<?=$this->getSlug()?>_interestURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
+				Title: <input type="text" name="<?php echo $this->getSlug()?>_interestTitle[]" value="<?php echo htmlspecialchars($title)?>" size="40"/>
+				Page URL: <input type="text" name="<?php echo $this->getSlug()?>_interestURL[]" value="<?php echo htmlspecialchars($url)?>" size="60"/>
 				</div>
-<?
+<?php
 			}
 		}
 ?>
 		<div class="new_entries_interests">
 		<div>
-		Title: <input type="text" name="<?=$this->getSlug()?>_interestTitle[]" value="" size="40"/>
-		Page URL: <input type="text" name="<?=$this->getSlug()?>_interestURL[]" value="" size="60"/>
+		Title: <input type="text" name="<?php echo $this->getSlug()?>_interestTitle[]" value="" size="40"/>
+		Page URL: <input type="text" name="<?php echo $this->getSlug()?>_interestURL[]" value="" size="60"/>
 		</div>
 		</div>
 
 		</div>
-<?
+<?php
 	}
 
 	function saveChanges($model, &$personURI, $language)

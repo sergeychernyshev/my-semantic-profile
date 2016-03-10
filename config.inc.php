@@ -1,16 +1,16 @@
-<?
+<?php
 /**
  * Someconfiguration parameters
  */
 
 // change this to the full URL of your installation
-$baseURL = 'http://www.yoursite.com/profile/';
+$baseURL = 'https://www.sergeychernyshev.com/profile/';
 
 /**
  * location of Personal Profile Document
  */
-$profileDocument = $SPROOT.'/foaf.rdf';
-$profileDocumentURI = $baseURL.'foaf.rdf';
+$profileDocument = dirname(__DIR__) . '/sergey.rdf';
+$profileDocumentURI = 'https://www.sergeychernyshev.com/sergey.rdf';
 
 /**
  * Uncomment for test cases
@@ -18,4 +18,4 @@ $profileDocumentURI = $baseURL.'foaf.rdf';
 #$profileDocument = $SPROOT.'/tests/timbl.rdf';
 #$profileDocumentURI = $baseURL.'tests/timbl.rdf';
 
-$googleMapsKey = '-- insert Google Maps API key here --';
+$googleMapsKey = 'AIzaSyD1Kxyu-4KqPby6b1axV1RTYrYrS9DVe-M';

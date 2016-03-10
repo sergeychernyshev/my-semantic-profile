@@ -1,4 +1,4 @@
-<?
+<?php
 class BasicInfoDisplayModule extends DisplayModule
 {
 	function getName()
@@ -31,13 +31,13 @@ class BasicInfoDisplayModule extends DisplayModule
 		?>
 		<h2>Images</h2>
 		<div id="images">
-		<?
+		<?php
 			foreach ($images as $image)
 			{
-				?><span rel="foaf:img" resource="<?=$profilefulluri->resolve($image['?image']->getURI())->getURL() ?>"><a rel="gallery1" class="photo" href="<?=$profilefulluri->resolve($image['?image']->getURI())->getURL() ?>" title="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>"><img src="<?=$profilefulluri->resolve($image['?thumbnail'] ? $image['?thumbnail']->getURI() : $image['?image']->getURI())->getURL() ?>" class="thumbnail" alt="<?=($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?=$profilefulluri->resolve($image['?image']->getURI())->getURL() ?>"/></a></span>
-		<?
+				?><span rel="foaf:img" resource="<?php echo $profilefulluri->resolve($image['?image']->getURI())->getURL() ?>"><a rel="gallery1" class="photo" href="<?php echo $profilefulluri->resolve($image['?image']->getURI())->getURL() ?>" title="<?php echo ($personName ? $personName->getLabel()."'s photo" : 'photo')?>"><img src="<?php echo $profilefulluri->resolve($image['?thumbnail'] ? $image['?thumbnail']->getURI() : $image['?image']->getURI())->getURL() ?>" class="thumbnail" alt="<?php echo ($personName ? $personName->getLabel()."'s photo" : 'photo')?>" rev="foaf:thumbnail" resource="<?php echo $profilefulluri->resolve($image['?image']->getURI())->getURL() ?>"/></a></span>
+		<?php
 			}
-		?></div><?
+		?></div><?php
 		}
 
 		/**
@@ -76,29 +76,29 @@ class BasicInfoDisplayModule extends DisplayModule
 		if ($homepages && count($homepagestodisplay))
 		{
 			?><h2>Homepages</h2>
-		<div id="homepages"><ul><?
+		<div id="homepages"><ul><?php
 
 			foreach ($homepagestodisplay as $homepage => $languages)
 			{
 				if (array_key_exists($lang, $languages))
 				{
-					?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$profilefulluri->resolve($homepage)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
-			<?
+					?><li rel="foaf:homepage"><a class="url" rel="me" about="<?php echo $profilefulluri->resolve($homepage)->getURL() ?>" property="dc:title" href="<?php echo $profilefulluri->resolve($homepage)->getURL() ?>"<?php echo xmlLang($lang) ?>><?php echo $languages[$lang] ?></a></li>
+			<?php
 				}
 				elseif (array_key_exists($defaultlang, $languages))
 				{
-					?><li rel="foaf:homepage"><a class="url" rel="me" about="<?=$profilefulluri->resolve($homepage)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
-			<?
+					?><li rel="foaf:homepage"><a class="url" rel="me" about="<?php echo $profilefulluri->resolve($homepage)->getURL() ?>" property="dc:title" href="<?php echo $profilefulluri->resolve($homepage)->getURL() ?>"<?php echo xmlLang($lang) ?>><?php echo $languages[$defaultlang] ?></a></li>
+			<?php
 				}
 				else	
 				{
-					?><li rel="foaf:homepage" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"><a class="url" rel="me" href="<?=$profilefulluri->resolve($homepage)->getURL() ?>"><?=$profilefulluri->resolve($homepage)->getURL() ?></a></li>
-			<?
+					?><li rel="foaf:homepage" href="<?php echo $profilefulluri->resolve($homepage)->getURL() ?>"><a class="url" rel="me" href="<?php echo $profilefulluri->resolve($homepage)->getURL() ?>"><?php echo $profilefulluri->resolve($homepage)->getURL() ?></a></li>
+			<?php
 				}
 			}
 
 		?></ul></div>
-		<?
+		<?php
 		}
 
 		/*
@@ -134,31 +134,31 @@ class BasicInfoDisplayModule extends DisplayModule
 		if ($blogs && count($blogstodisplay))
 		{
 			?><h2>Blogs</h2>
-			<div id="blogs"><ul><?
+			<div id="blogs"><ul><?php
 
 				foreach ($blogstodisplay as $blog => $languages)
 				{
 					if (array_key_exists($lang, $languages))
 					{
-						?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$profilefulluri->resolve($blog)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($blog)->getURL()?>"<?=xmlLang($lang) ?>><?=$languages[$lang] ?></a></li>
-				<?
+						?><li rel="foaf:weblog"><a class="url" rel="me" about="<?php echo $profilefulluri->resolve($blog)->getURL() ?>" property="dc:title" href="<?php echo $profilefulluri->resolve($blog)->getURL()?>"<?php echo xmlLang($lang) ?>><?php echo $languages[$lang] ?></a></li>
+				<?php
 					}
 					elseif (array_key_exists($defaultlang, $languages))
 					{
-						?><li rel="foaf:weblog"><a class="url" rel="me" about="<?=$profilefulluri->resolve($blog)->getURL() ?>" property="dc:title" href="<?=$profilefulluri->resolve($blog)->getURL() ?>"<?=xmlLang($lang) ?>><?=$languages[$defaultlang] ?></a></li>
-				<?
+						?><li rel="foaf:weblog"><a class="url" rel="me" about="<?php echo $profilefulluri->resolve($blog)->getURL() ?>" property="dc:title" href="<?php echo $profilefulluri->resolve($blog)->getURL() ?>"<?php echo xmlLang($lang) ?>><?php echo $languages[$defaultlang] ?></a></li>
+				<?php
 					}
 					else	
 					{
-						?><li rel="foaf:weblog" href="<?=$profilefulluri->resolve($blog)->getURL() ?>"><a class="url" rel="me" href="<?=$profilefulluri->resolve($blog)->getURL() ?>"><?=$profilefulluri->resolve($blog)->getURL() ?></a></li>
-				<?
+						?><li rel="foaf:weblog" href="<?php echo $profilefulluri->resolve($blog)->getURL() ?>"><a class="url" rel="me" href="<?php echo $profilefulluri->resolve($blog)->getURL() ?>"><?php echo $profilefulluri->resolve($blog)->getURL() ?></a></li>
+				<?php
 				}
 			
 				
 			}
 
 		?></ul></div>
-		<?
+		<?php
 		}
 
 		return true;

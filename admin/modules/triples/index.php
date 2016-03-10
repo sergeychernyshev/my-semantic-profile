@@ -1,4 +1,4 @@
-<? // $Id$
+<?php // $Id$
 class RDFXMLModule extends EditModule
 {
 	function getName()
@@ -18,10 +18,10 @@ class RDFXMLModule extends EditModule
 		/*
 		 * URI
 		 */
-		?><div id="<?=$this->getSlug()?>_rdfxml">
-		<textarea name="<?=$this->getSlug()?>_triples" style="width: 100%" rows="25"><?=htmlspecialchars($rdf)?></textarea>
+		?><div id="<?php echo $this->getSlug()?>_rdfxml">
+		<textarea name="<?php echo $this->getSlug()?>_triples" style="width: 100%" rows="25"><?php echo htmlspecialchars($rdf)?></textarea>
 		</div>
-<?
+<?php
 	}
 
 	function saveChanges(&$model, $personURI, $language)

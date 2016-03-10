@@ -1,11 +1,10 @@
-<?
+<?php
 /**
  * Automated version generator
  */
 $version = '0.4.3';
 
-preg_match('$'.'Rev: (\d+) $', '$Rev$', $matches);
-$build = $matches[1];
+$build = "0b1d5c978871d96df5671db15fea40e74c196c3e";
 
 /*
  * default value for this variable - can be overriden in config.inc.php

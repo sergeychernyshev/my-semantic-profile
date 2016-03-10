@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * This program helps manage person's user profile using Semantic Web standards such as FOAF
  */
@@ -83,35 +83,35 @@ header('Content-type: text/html; charset=utf-8');
 <body onload="initNewEntries()">
 <form action="./" method="POST">
 <div id="navigation">
-<input name="module" type="hidden" value="<?=urlencode($module->getSlug())?>">
+<input name="module" type="hidden" value="<?php echo urlencode($module->getSlug())?>">
 <span class="moduletabs">
-<?
+<?php
 foreach ($modules as $mod)
 {
 	if ($mod == $module)
 	{
-		?><span class="activetab" id="nav_<?=$mod->getSlug()?>"><?=$mod->getName()?></span>
-<?
+		?><span class="activetab" id="nav_<?php echo $mod->getSlug()?>"><?php echo $mod->getName()?></span>
+<?php
 	}
 	else
 	{
-		?><a class="tab" id="nav_<?=$mod->getSlug()?>" href="./?<? if ($mod != $modules[0]) { ?>module=<?=urlencode($mod->getSlug())?><? } ?>&lang=<?=$lang?><? if (!$defaultPerson) { echo '&personURI='.urlencode($personURI->getURI()); } ?>"><?=$mod->getName()?></a>
-<?
+		?><a class="tab" id="nav_<?php echo $mod->getSlug()?>" href="./?<?php if ($mod != $modules[0]) { ?>module=<?php echo urlencode($mod->getSlug())?><?php } ?>&lang=<?php echo $lang?><?php if (!$defaultPerson) { echo '&personURI='.urlencode($personURI->getURI()); } ?>"><?php echo $mod->getName()?></a>
+<?php
 	}
 }
-?></span><select name="lang" onchange="switchLanguage(this.options[this.selectedIndex].value, '<?
+?></span><select name="lang" onchange="switchLanguage(this.options[this.selectedIndex].value, '<?php
 if ($module != $modules[0])
 {
 	echo urlencode($module->getSlug());
 }
-?>', '<?=urlencode($defaultlang)?>', '<?
+?>', '<?php echo urlencode($defaultlang)?>', '<?php
 if (!$defaultPerson)
 {
 	echo urlencode($personURI->getURI());
 }
 ?>');">
 
-<option value="<?=$defaultlang ?>"<? if ($lang == $defaultlang) { ?> selected<?}?>><?=(array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?
+<option value="<?php echo $defaultlang ?>"<?php if ($lang == $defaultlang) { ?> selected<?php }?>><?php echo (array_key_exists($defaultlang, $languageParams) ? $languageParams[$defaultlang]['label'] : $defaultlang) ?> (default)</option><?php
 
 $model_languages = getModelLanguages($model);
 
@@ -125,7 +125,7 @@ if (count($model_languages))
 {
 	foreach (array_keys($model_languages) as $l)
 	{
-		?><option value="<?=$l ?>"<? if ($lang == $l) {?> selected<?}?>><?=(array_key_exists($l, $languageParams) ? $languageParams[$l]['label'] : $l) ?></option><?
+		?><option value="<?php echo $l ?>"<?php if ($lang == $l) {?> selected<?php }?>><?php echo (array_key_exists($l, $languageParams) ? $languageParams[$l]['label'] : $l) ?></option><?php
 	}
 }
 
@@ -134,47 +134,47 @@ if (count($model_languages))
  */
 if(!array_key_exists($lang, $model_languages) && $lang != $defaultlang)
 {
-	?><option value="<?=$lang?>" selected><?=(array_key_exists($lang, $languageParams) ? $languageParams[$lang]['label'] : $lang) ?></option><?
+	?><option value="<?php echo $lang?>" selected><?php echo (array_key_exists($lang, $languageParams) ? $languageParams[$lang]['label'] : $lang) ?></option><?php
 }
 
 /*
  * Show more languages we know about in the dropdown below
  */
 ?><option>-- add new --</option>
-<?
+<?php
 foreach ($languageSequence as $language)
 {
 	if ($language != $defaultlang && !array_key_exists($language, $model_languages) && $language != $lang)
 	{
-		?><option value="<?=$language ?>"><?=$languageParams[$language]['label'] ?></option><?
+		?><option value="<?php echo $language ?>"><?php echo $languageParams[$language]['label'] ?></option><?php
 	}
 }
 ?>
 </select>
 
-<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?=$profileDocumentURI?>">RDF</a> | <a href="<?=$personURI->getURI()?>">Person URI</a></span>
+<span id="viewnav">View: <a href="../">HTML page</a> |  <a href="<?php echo $profileDocumentURI?>">RDF</a> | <a href="<?php echo $personURI->getURI()?>">Person URI</a></span>
 </div>
 <div id="module">
-<div id="title"><?=$module->getName()?></div><?
+<div id="title"><?php echo $module->getName()?></div><?php
 if (!$defaultPerson)
 {
-	?><div id="personURI">Editing <b><?=htmlspecialchars($personURI->getURI())?></b> (<a href="./?module=people&lang=<?=$lang?>">go back</a>)</div>
-	<input type="hidden" name="personURI" value="<?=htmlspecialchars($personURI->getURI())?>">
-	<?
+	?><div id="personURI">Editing <b><?php echo htmlspecialchars($personURI->getURI())?></b> (<a href="./?module=people&lang=<?php echo $lang?>">go back</a>)</div>
+	<input type="hidden" name="personURI" value="<?php echo htmlspecialchars($personURI->getURI())?>">
+	<?php
 }
 
 if (array_key_exists('saved', $_REQUEST))
 {
-	?><div id="message" class="save<?=($_REQUEST['saved'] == 'success' ? 'success' : 'failure')?>"><?
+	?><div id="message" class="save<?php echo ($_REQUEST['saved'] == 'success' ? 'success' : 'failure')?>"><?php
 	if($_REQUEST['saved'] == 'success')
 	{
-		?><img id="messageicon" src="yes.png"> Changes were successfully saved<?
+		?><img id="messageicon" src="yes.png"> Changes were successfully saved<?php
 	}
 	else
 	{
-		?><img id="messageicon" src="no.png"> There was a problem saving changes<?
+		?><img id="messageicon" src="no.png"> There was a problem saving changes<?php
 	}
-	?></div><?
+	?></div><?php
 }
 
 $module->displayForm($model, $personURI, $lang);
@@ -182,6 +182,6 @@ $module->displayForm($model, $personURI, $lang);
 </div>
 <div id="formbottom"><input type="submit" name="save" value="Save changes"></div>
 </form>
-<div id="footer">Powered by <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?=$version?> r<?=$build?>)</div>
+<div id="footer">Powered by <a href="http://code.google.com/p/my-semantic-profile/">My Semantic Profile</a> (v.<?php echo $version?> r<?php echo $build?>)</div>
 </body>
 </html>

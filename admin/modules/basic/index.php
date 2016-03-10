@@ -1,4 +1,4 @@
-<?
+<?php
 class BasicInfoModule extends EditModule
 {
 	function getName()
@@ -19,10 +19,10 @@ class BasicInfoModule extends EditModule
 		 * URI
 		 */
 		?><h2>URI</h2>
-		<div id="<?=$this->getSlug()?>_uri">
-		<input type="text" name="<?=$this->getSlug()?>_uri" value="<?=htmlspecialchars($personURI->getURI())?>" size="60">
+		<div id="<?php echo $this->getSlug()?>_uri">
+		<input type="text" name="<?php echo $this->getSlug()?>_uri" value="<?php echo htmlspecialchars($personURI->getURI())?>" size="60">
 		</div>
-<?
+<?php
 		/*
 		 * Names
 		 */
@@ -32,8 +32,8 @@ class BasicInfoModule extends EditModule
 		$namenumber = 0;
 
 		?><h2>Names</h2>
-		<div id="<?=$this->getSlug()?>_names">
-<?
+		<div id="<?php echo $this->getSlug()?>_names">
+<?php
 		$it = $model->findAsIterator($personURI, new Resource($foaf.'name'), NULL);
 		while ($it->hasNext()) {
 			$statement = $it->next();
@@ -42,42 +42,42 @@ class BasicInfoModule extends EditModule
 			if (getLiteralLanguage($name) == $language)
 			{
 			?>
-				<div><input type="text" name="<?=$this->getSlug()?>_name[]" value="<?=htmlspecialchars($name->getLabel())?>"/></div>
-<?
+				<div><input type="text" name="<?php echo $this->getSlug()?>_name[]" value="<?php echo htmlspecialchars($name->getLabel())?>"/></div>
+<?php
 				$namenumber++;
 			}
 		}
 ?>
 		<div class="new_entries_name">
 		<div>
-		<input type="text" name="<?=$this->getSlug()?>_name[]" value=""/>
+		<input type="text" name="<?php echo $this->getSlug()?>_name[]" value=""/>
 		</div>
 		</div>
 		</div>
 
 		<h2>OpenID</h2>
-		<div id="<?=$this->getSlug()?>_openid">
-<?
+		<div id="<?php echo $this->getSlug()?>_openid">
+<?php
 		$it = $model->findAsIterator($personURI, new Resource($foaf.'openid'), NULL);
 		while ($it->hasNext()) {
 			$statement = $it->next();
 			$openid = $statement->getObject();
 
-			?><div><input type="text" name="<?=$this->getSlug()?>_openid[]" value="<?=htmlspecialchars($openid->getURI())?>" size="60"/></div><?
+			?><div><input type="text" name="<?php echo $this->getSlug()?>_openid[]" value="<?php echo htmlspecialchars($openid->getURI())?>" size="60"/></div><?php
 		}
 ?>
 		<div class="new_entries_openid">
 		<div>
-		<input type="text" name="<?=$this->getSlug()?>_openid[]" value="" size="60"/>
+		<input type="text" name="<?php echo $this->getSlug()?>_openid[]" value="" size="60"/>
 		</div>
 		</div>
 		</div>
 
 		<h2>Sites</h2>
-		<div id="<?=$this->getSlug()?>_sites">
+		<div id="<?php echo $this->getSlug()?>_sites">
 		<h3>Home pages</h3>
-		<div id="<?=$this->getSlug()?>_homepages">
-<?
+		<div id="<?php echo $this->getSlug()?>_homepages">
+<?php
 		$query = '
 		PREFIX foaf: <'.$foaf.'>
 		PREFIX dc: <'.$dc.'>
@@ -109,24 +109,24 @@ class BasicInfoModule extends EditModule
 			{
 ?>
 				<div>
-				Title: <input type="text" name="<?=$this->getSlug()?>_homepageTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
-				URL: <input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
+				Title: <input type="text" name="<?php echo $this->getSlug()?>_homepageTitle[]" value="<?php echo htmlspecialchars($title)?>" size="40"/>
+				URL: <input type="text" name="<?php echo $this->getSlug()?>_homepageURL[]" value="<?php echo htmlspecialchars($url)?>" size="60"/>
 				</div>
-<?
+<?php
 			}
 		}
 ?>
 		<div class="new_entries_homepages">
 		<div>
-		Title: <input type="text" name="<?=$this->getSlug()?>_homepageTitle[]" value="" size="40"/>
-		URL: <input type="text" name="<?=$this->getSlug()?>_homepageURL[]" value="" size="60"/>
+		Title: <input type="text" name="<?php echo $this->getSlug()?>_homepageTitle[]" value="" size="40"/>
+		URL: <input type="text" name="<?php echo $this->getSlug()?>_homepageURL[]" value="" size="60"/>
 		</div>
 		</div>
 
 		</div>
 		<h3>Blogs</h3>
-		<div id="<?=$this->getSlug()?>_blogs">
-<?
+		<div id="<?php echo $this->getSlug()?>_blogs">
+<?php
 		$query = '
 		PREFIX foaf: <'.$foaf.'>
 		PREFIX dc: <'.$dc.'>
@@ -158,17 +158,17 @@ class BasicInfoModule extends EditModule
 			{
 ?>
 			<div>
-				Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="<?=htmlspecialchars($title)?>" size="40"/>
-				URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="<?=htmlspecialchars($url)?>" size="60"/>
+				Title: <input type="text" name="<?php echo $this->getSlug()?>_blogTitle[]" value="<?php echo htmlspecialchars($title)?>" size="40"/>
+				URL: <input type="text" name="<?php echo $this->getSlug()?>_blogURL[]" value="<?php echo htmlspecialchars($url)?>" size="60"/>
 				</div>
-<?
+<?php
 			}
 		}
 ?>
 		<div class="new_entries_blogs">
 		<div>
-		Title: <input type="text" name="<?=$this->getSlug()?>_blogTitle[]" value="" size="40"/>
-		URL: <input type="text" name="<?=$this->getSlug()?>_blogURL[]" value="" size="60"/>
+		Title: <input type="text" name="<?php echo $this->getSlug()?>_blogTitle[]" value="" size="40"/>
+		URL: <input type="text" name="<?php echo $this->getSlug()?>_blogURL[]" value="" size="60"/>
 		</div>
 
 		</div>
@@ -177,23 +177,23 @@ class BasicInfoModule extends EditModule
 
 		<h2>Additional Resources</h2>
 		Resources to be added as rdfs:seeAlso
-		<div id="<?=$this->getSlug()?>_seealso">
-<?
+		<div id="<?php echo $this->getSlug()?>_seealso">
+<?php
 		$it = $model->findAsIterator($personURI, new Resource($rdfs.'seeAlso'), NULL);
 		while ($it->hasNext()) {
 			$statement = $it->next();
 			$seealso= $statement->getObject();
 
-			?><div><input type="text" name="<?=$this->getSlug()?>_seealso[]" value="<?=htmlspecialchars($seealso->getURI())?>" size="60"/></div><?
+			?><div><input type="text" name="<?php echo $this->getSlug()?>_seealso[]" value="<?php echo htmlspecialchars($seealso->getURI())?>" size="60"/></div><?php
 		}
 ?>
 		<div class="new_entries_seealso">
 		<div>
-		<input type="text" name="<?=$this->getSlug()?>_seealso[]" value="" size="60"/>
+		<input type="text" name="<?php echo $this->getSlug()?>_seealso[]" value="" size="60"/>
 		</div>
 		</div>
 		</div>
-<?
+<?php
 	}
 
 	function saveChanges($model, &$personURI, $language)

@@ -1,4 +1,4 @@
-<?
+<?php
 class PicturesModule extends EditModule
 {
 	function getName()
